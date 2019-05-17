@@ -12,7 +12,7 @@ PROJECTFOLDER="/root/ose3.11"
 ENVFOLDER="$1"
 INVENTORYFILE="$2"
 
-PROJECTFOLDER="/root/ose3.11/ansible-hosts" environments/${ENVFOLDER}/${INVENTORYFILE}
+PROJECTFOLDER="/root/ose3.11/ansible-hosts"
 
 cp ${PROJECTFOLDER} environments/${ENVFOLDER}/${INVENTORYFILE}
 
