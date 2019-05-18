@@ -1,6 +1,7 @@
 #!/bin/bash
 # Author: Tosin Akinosho (Red Hat)
 # Purpose: Sync changes to inventory file to git repo
+set -x
 
 if [[ -z $1  && -z $2 ]]; then
   echo "Please pass inventory directory and  inventory name."
@@ -12,7 +13,7 @@ PROJECTFOLDER="/root/ose3.11"
 ENVFOLDER="$1"
 INVENTORYFILE="$2"
 
-PROJECTFOLDER="/root/ose3.11/ansible-hosts" environments/${ENVFOLDER}/${INVENTORYFILE}
+PROJECTFOLDER="/root/ose3.11/ansible-hosts"
 
 cp ${PROJECTFOLDER} environments/${ENVFOLDER}/${INVENTORYFILE}
 
