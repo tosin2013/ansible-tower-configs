@@ -1,0 +1,2088 @@
+[
+  {
+    "credential_type": "Source Control",
+    "inputs": {
+      "username": "takinosh@redhat.com",
+      "password": ""
+    },
+    "asset_relation": {
+      "roles": [
+        {
+          "team": [],
+          "name": "Admin",
+          "user": [
+            "admin"
+          ]
+        },
+        {
+          "team": [],
+          "name": "Read",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Use",
+          "user": []
+        }
+      ]
+    },
+    "asset_type": "credential",
+    "name": "gitlab-info"
+  },
+  {
+    "credential_type": "Machine",
+    "inputs": {
+      "username": "takinosho",
+      "password": ""
+    },
+    "asset_relation": {
+      "roles": [
+        {
+          "team": [],
+          "name": "Admin",
+          "user": [
+            "admin"
+          ]
+        },
+        {
+          "team": [],
+          "name": "Read",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Use",
+          "user": []
+        }
+      ]
+    },
+    "asset_type": "credential",
+    "name": "MainServer"
+  },
+  {
+    "credential_type": "Machine",
+    "inputs": {
+      "username": "tosin",
+      "password": "",
+      "become_password": ""
+    },
+    "asset_relation": {
+      "roles": [
+        {
+          "team": [],
+          "name": "Admin",
+          "user": [
+            "admin"
+          ]
+        },
+        {
+          "team": [],
+          "name": "Read",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Use",
+          "user": []
+        }
+      ]
+    },
+    "asset_type": "credential",
+    "name": "server-credentials"
+  },
+  {
+    "credential_type": "VMware vCenter",
+    "inputs": {
+      "username": "administrator@vsphere.local",
+      "host": "photon-machine.attlocal.net",
+      "password": ""
+    },
+    "asset_relation": {
+      "roles": [
+        {
+          "team": [],
+          "name": "Admin",
+          "user": [
+            "admin"
+          ]
+        },
+        {
+          "team": [],
+          "name": "Read",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Use",
+          "user": []
+        }
+      ]
+    },
+    "asset_type": "credential",
+    "name": "vmware-credentials"
+  },
+  {
+    "credential": "server-credentials",
+    "name": "configure-dns-server-for-openshift",
+    "ask_variables_on_launch": true,
+    "extra_vars": "---\nzone_name: ocp.example.com\nkey_name: example.key\nserver_ip: ansible_tower_ip",
+    "asset_relation": {
+      "extra_credentials": [],
+      "notification_templates_error": [],
+      "notification_templates_success": [],
+      "roles": [
+        {
+          "team": [],
+          "name": "Read",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Execute",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Admin",
+          "user": [
+            "admin"
+          ]
+        }
+      ],
+      "labels": [],
+      "schedules": [],
+      "survey_spec": {}
+    },
+    "project": "openshift-ansible-tower",
+    "inventory": "dns_server",
+    "become_enabled": true,
+    "asset_type": "job_template",
+    "playbook": "dns-server-configure-for-openshift.yml"
+  },
+  {
+    "credential": "server-credentials",
+    "name": "deploy ansible tower",
+    "ask_variables_on_launch": true,
+    "extra_vars": "#https://docs.ansible.com/ansible-tower/latest/html/release-notes/relnotes.html\n---\ntower_setup_version: \"3.4.3-1\"\ntower_setup_dir: \"/opt\"\ntower_setup_admin_password: \"admin\"\ntower_setup_pg_database: \"tower\"\ntower_setup_pg_username: \"tower\"\ntower_setup_pg_password: \"tower\"\ntower_setup_rabbitmq_pass: \"tower\"",
+    "asset_relation": {
+      "extra_credentials": [],
+      "notification_templates_error": [],
+      "notification_templates_success": [],
+      "roles": [
+        {
+          "team": [],
+          "name": "Read",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Execute",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Admin",
+          "user": [
+            "admin"
+          ]
+        }
+      ],
+      "labels": [],
+      "schedules": [],
+      "survey_spec": {}
+    },
+    "project": "openshift-ansible-tower",
+    "inventory": "jumpbox",
+    "become_enabled": true,
+    "asset_type": "job_template",
+    "playbook": "ansible-tower-provision.yml"
+  },
+  {
+    "name": "deploy-vmware-vm",
+    "allow_simultaneous": true,
+    "ask_variables_on_launch": true,
+    "extra_vars": "---\nvmware_datacenter: 'Tosins-HomeLAB'\nvmware_new_hostname: \"{{ server_name }}\"\nvmware_template_name: \"{{ vm_template_name }}\"\nvmware_datastore: DatastoreCluster\nvmware_folder: '/'\nvmware_disk_size: 20\nvmware_ram_mb: 2048\nvm_cpu_count: 1\nvm_core_per_cpu: 1\nvmware_network: 'VM Network'\nvmware_state: poweredon\nadddisk: false",
+    "asset_relation": {
+      "extra_credentials": [
+        "vmware-credentials"
+      ],
+      "notification_templates_error": [],
+      "notification_templates_success": [],
+      "roles": [
+        {
+          "team": [],
+          "name": "Read",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Execute",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Admin",
+          "user": [
+            "admin"
+          ]
+        }
+      ],
+      "labels": [],
+      "schedules": [],
+      "survey_spec": {}
+    },
+    "project": "openshift-ansible-tower",
+    "inventory": "localhost-inventory",
+    "forks": 1,
+    "asset_type": "job_template",
+    "playbook": "infrastructure-provision-vmware-virtual-machine.yml"
+  },
+  {
+    "credential": "server-credentials",
+    "name": "dns-port-verification.yml",
+    "extra_vars": "---\nport_num: 53",
+    "asset_relation": {
+      "extra_credentials": [],
+      "notification_templates_error": [],
+      "notification_templates_success": [],
+      "roles": [
+        {
+          "team": [],
+          "name": "Read",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Execute",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Admin",
+          "user": [
+            "admin"
+          ]
+        }
+      ],
+      "labels": [],
+      "schedules": [],
+      "survey_spec": {}
+    },
+    "project": "openshift-ansible-tower",
+    "inventory": "dns_server",
+    "become_enabled": true,
+    "asset_type": "job_template",
+    "playbook": "dns-port-verification.yml"
+  },
+  {
+    "credential": "server-credentials",
+    "name": "dns-server-deploy-bind",
+    "extra_vars": "---\nmaster_server_ip: \"{{ ansible_default_ipv4.address }}\"\nfqdn: example.com\nzone_network: \" {{ ansible_default_ipv4.address.split('.')[0:3] | join('.') }} \"\nzone_ip: \"{{ ansible_default_ipv4.address }}\"",
+    "asset_relation": {
+      "extra_credentials": [],
+      "notification_templates_error": [],
+      "notification_templates_success": [],
+      "roles": [
+        {
+          "team": [],
+          "name": "Read",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Execute",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Admin",
+          "user": [
+            "admin"
+          ]
+        }
+      ],
+      "labels": [],
+      "schedules": [],
+      "survey_spec": {}
+    },
+    "project": "openshift-ansible-tower",
+    "inventory": "dns_server",
+    "become_enabled": true,
+    "asset_type": "job_template",
+    "playbook": "dns-server-deploy.yml"
+  },
+  {
+    "credential": "server-credentials",
+    "name": "hello-world",
+    "asset_relation": {
+      "extra_credentials": [],
+      "notification_templates_error": [],
+      "notification_templates_success": [],
+      "roles": [
+        {
+          "team": [],
+          "name": "Read",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Execute",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Admin",
+          "user": [
+            "admin"
+          ]
+        }
+      ],
+      "labels": [],
+      "schedules": [],
+      "survey_spec": {}
+    },
+    "project": "openshift-ansible-tower",
+    "inventory": "dns_server",
+    "asset_type": "job_template",
+    "playbook": "helloworld.yml"
+  },
+  {
+    "credential": "server-credentials",
+    "name": "openshift-ansible-deployment",
+    "ask_variables_on_launch": true,
+    "extra_vars": "---\noc_username: example\noc_password: ex@mp1epa55\ninventory_file: inventory.example",
+    "asset_relation": {
+      "extra_credentials": [],
+      "notification_templates_error": [],
+      "notification_templates_success": [],
+      "roles": [
+        {
+          "team": [],
+          "name": "Read",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Execute",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Admin",
+          "user": [
+            "admin"
+          ]
+        }
+      ],
+      "labels": [],
+      "schedules": [],
+      "survey_spec": {}
+    },
+    "project": "openshift-ansible-tower",
+    "inventory": "jumpbox",
+    "become_enabled": true,
+    "asset_type": "job_template",
+    "playbook": "deploy-openshift.yml"
+  },
+  {
+    "credential": "server-credentials",
+    "name": "openshift jumpbox 3.11 deployer",
+    "asset_relation": {
+      "extra_credentials": [],
+      "notification_templates_error": [],
+      "notification_templates_success": [],
+      "roles": [
+        {
+          "team": [],
+          "name": "Read",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Execute",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Admin",
+          "user": [
+            "admin"
+          ]
+        }
+      ],
+      "labels": [],
+      "schedules": [],
+      "survey_spec": {}
+    },
+    "project": "openshift-ansible-tower",
+    "inventory": "jumpbox",
+    "playbook": "infrastructure-provision-vmware-jumpbox-v3.11.yml",
+    "asset_type": "job_template",
+    "become_enabled": true
+  },
+  {
+    "credential": "server-credentials",
+    "name": "openshift master node config",
+    "asset_relation": {
+      "extra_credentials": [],
+      "notification_templates_error": [],
+      "notification_templates_success": [],
+      "roles": [
+        {
+          "team": [],
+          "name": "Read",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Execute",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Admin",
+          "user": []
+        }
+      ],
+      "labels": [],
+      "schedules": [],
+      "survey_spec": {}
+    },
+    "project": "openshift-ansible-tower",
+    "inventory": "master",
+    "playbook": "infrastructure-provision-vmware-openshift-nodes-v3.11.yml",
+    "asset_type": "job_template",
+    "become_enabled": true
+  },
+  {
+    "credential": "server-credentials",
+    "name": "openshift worker node config",
+    "asset_relation": {
+      "extra_credentials": [],
+      "notification_templates_error": [],
+      "notification_templates_success": [],
+      "roles": [
+        {
+          "team": [],
+          "name": "Read",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Execute",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Admin",
+          "user": []
+        }
+      ],
+      "labels": [],
+      "schedules": [],
+      "survey_spec": {}
+    },
+    "project": "openshift-ansible-tower",
+    "inventory": "nodes",
+    "playbook": "infrastructure-provision-vmware-openshift-nodes-v3.11.yml",
+    "asset_type": "job_template",
+    "become_enabled": true
+  },
+  {
+    "credential": "server-credentials",
+    "name": "provision-dns-server",
+    "ask_variables_on_launch": true,
+    "extra_vars": "---\nrhel_username: \nrhel_password:",
+    "asset_relation": {
+      "extra_credentials": [],
+      "notification_templates_error": [],
+      "notification_templates_success": [],
+      "roles": [
+        {
+          "team": [],
+          "name": "Read",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Execute",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Admin",
+          "user": [
+            "admin"
+          ]
+        }
+      ],
+      "labels": [],
+      "schedules": [],
+      "survey_spec": {}
+    },
+    "project": "openshift-ansible-tower",
+    "inventory": "dns_server",
+    "become_enabled": true,
+    "asset_type": "job_template",
+    "playbook": "dns-server-provisioning.yml"
+  },
+  {
+    "credential": "server-credentials",
+    "name": "restart VM",
+    "asset_relation": {
+      "extra_credentials": [],
+      "notification_templates_error": [],
+      "notification_templates_success": [],
+      "roles": [
+        {
+          "team": [],
+          "name": "Read",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Execute",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Admin",
+          "user": [
+            "admin"
+          ]
+        }
+      ],
+      "labels": [],
+      "schedules": [],
+      "survey_spec": {}
+    },
+    "project": "openshift-ansible-tower",
+    "inventory": "dns_server",
+    "playbook": "restart_vm.yml",
+    "asset_type": "job_template",
+    "become_enabled": true
+  },
+  {
+    "credential": "server-credentials",
+    "name": "test dns server entry",
+    "ask_variables_on_launch": true,
+    "extra_vars": "---\nuser_data_file: /etc/named/example.key\ndns_key_name: example.key\ndns_server_ip: \"{{ ansible_default_ipv4.address }}\"\ndns_zone: ocp.example.com\na_record: test\nip_address: use_dummy_ip_to_test_a_record",
+    "verbosity": 3,
+    "asset_relation": {
+      "extra_credentials": [],
+      "notification_templates_error": [],
+      "notification_templates_success": [],
+      "roles": [
+        {
+          "team": [],
+          "name": "Read",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Execute",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Admin",
+          "user": [
+            "admin"
+          ]
+        }
+      ],
+      "labels": [],
+      "schedules": [],
+      "survey_spec": {}
+    },
+    "project": "openshift-ansible-tower",
+    "inventory": "dns_server",
+    "become_enabled": true,
+    "asset_type": "job_template",
+    "playbook": "dns-server-update-entry.yml"
+  },
+  {
+    "credential": "server-credentials",
+    "name": "test-ssh-connection",
+    "extra_vars": "---\nport_num: 22",
+    "asset_relation": {
+      "extra_credentials": [],
+      "notification_templates_error": [],
+      "notification_templates_success": [],
+      "roles": [
+        {
+          "team": [],
+          "name": "Read",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Execute",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Admin",
+          "user": []
+        }
+      ],
+      "labels": [],
+      "schedules": [],
+      "survey_spec": {}
+    },
+    "project": "openshift-ansible-tower",
+    "inventory": "nodes",
+    "become_enabled": true,
+    "asset_type": "job_template",
+    "playbook": "dns-port-verification.yml"
+  },
+  {
+    "name": "wipe-vmware-vm",
+    "ask_variables_on_launch": true,
+    "extra_vars": "---\nvcenter_datacenter: photon-machine.attlocal.net\nvcenter_cluster: \nvm_name: test",
+    "asset_relation": {
+      "extra_credentials": [
+        "vmware-credentials"
+      ],
+      "notification_templates_error": [],
+      "notification_templates_success": [],
+      "roles": [
+        {
+          "team": [],
+          "name": "Read",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Execute",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Admin",
+          "user": [
+            "admin"
+          ]
+        }
+      ],
+      "labels": [],
+      "schedules": [],
+      "survey_spec": {}
+    },
+    "project": "openshift-ansible-tower",
+    "inventory": "localhost-inventory",
+    "asset_type": "job_template",
+    "playbook": "infrastructure-delete-vmware-virtual-machine.yml"
+  },
+  {
+    "description": "deploy master vms needed for openshift",
+    "extra_vars": "---\nvmware_disk_size: 50\nvmware_ram_mb: 16384\nvm_cpu_count: 4\nvm_core_per_cpu: 1\nadddisk: true\nvmware_disk_two_size: 160",
+    "asset_relation": {
+      "labels": [],
+      "schedules": [],
+      "workflow_nodes": [
+        {
+          "name": "node0",
+          "unified_job_type": "job",
+          "success_nodes": [
+            "node1"
+          ],
+          "failure_nodes": [],
+          "unified_job_name": "deploy-vmware-vm",
+          "extra_data": {
+            "vmware_disk_size": 50,
+            "vm_cpu_count": 4,
+            "vmware_ram_mb": 16384
+          },
+          "always_nodes": []
+        },
+        {
+          "name": "node1",
+          "unified_job_type": "inventory_update",
+          "success_nodes": [
+            "node2"
+          ],
+          "failure_nodes": [],
+          "unified_job_name": "test-source",
+          "always_nodes": []
+        },
+        {
+          "name": "node2",
+          "unified_job_type": "job",
+          "success_nodes": [],
+          "failure_nodes": [],
+          "unified_job_name": "openshift master node config",
+          "always_nodes": []
+        }
+      ],
+      "roles": [
+        {
+          "team": [],
+          "name": "Admin",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Read",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Execute",
+          "user": []
+        }
+      ],
+      "survey_spec": {
+        "description": "",
+        "name": "",
+        "spec": [
+          {
+            "question_description": "",
+            "min": null,
+            "default": "rhel7-template",
+            "max": null,
+            "required": true,
+            "choices": "rhel7-template\ncentos7-template",
+            "new_question": true,
+            "variable": "vm_template_name",
+            "question_name": "Deploy RHEL Deployment or Centos deployment?",
+            "type": "multiplechoice"
+          },
+          {
+            "question_description": "",
+            "min": 6,
+            "default": "master_server",
+            "max": 1024,
+            "required": true,
+            "choices": "",
+            "variable": "server_name",
+            "question_name": "Please enter server name",
+            "type": "text"
+          },
+          {
+            "question_description": "",
+            "min": 6,
+            "default": "ocp.example.com",
+            "max": 1024,
+            "required": true,
+            "choices": "",
+            "new_question": true,
+            "variable": "fqdn",
+            "question_name": "Enter your dns zone name (Example: ocp.example.com):",
+            "type": "text"
+          },
+          {
+            "required": true,
+            "min": 5,
+            "default": "blank",
+            "max": 1024,
+            "question_description": "",
+            "choices": "",
+            "new_question": true,
+            "variable": "rhel_username",
+            "question_name": "Enter username for subscription-manager",
+            "type": "text"
+          },
+          {
+            "question_description": "",
+            "min": 6,
+            "default": "changeme",
+            "max": 32,
+            "required": true,
+            "choices": "",
+            "new_question": true,
+            "variable": "rhel_password",
+            "question_name": "Enter password for subscription-manager",
+            "type": "password"
+          },
+          {
+            "required": true,
+            "min": 5,
+            "default": "exampleuser",
+            "max": 1024,
+            "question_description": "",
+            "choices": "",
+            "new_question": true,
+            "variable": "rhel_user",
+            "question_name": "Username of admin",
+            "type": "text"
+          },
+          {
+            "required": true,
+            "min": null,
+            "default": "false",
+            "max": null,
+            "question_description": "This would be used for CNS",
+            "choices": "true\nfalse",
+            "variable": "glusterstorage",
+            "question_name": "Would you like to configure gluster?",
+            "type": "multiplechoice"
+          },
+          {
+            "question_description": "This will be the server that arecords will be written to.",
+            "min": 9,
+            "default": "192.168.1.5",
+            "max": 1024,
+            "required": true,
+            "choices": "",
+            "new_question": true,
+            "variable": "dns_server",
+            "question_name": "Enter DNS Server IP",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    "inventory": 9,
+    "organization": "Default",
+    "asset_type": "workflow",
+    "survey_enabled": true,
+    "name": "deploy_openshift_master_node"
+  },
+  {
+    "description": "deploy jumpbox vms needed for openshift",
+    "extra_vars": "---\nvmware_disk_size: 30\nvmware_ram_mb: 4096\nvm_cpu_count: 2\nvm_core_per_cpu: 1\nadddisk: false\nvmware_disk_two_size: 0",
+    "asset_relation": {
+      "labels": [],
+      "schedules": [],
+      "workflow_nodes": [
+        {
+          "name": "node0",
+          "unified_job_type": "job",
+          "success_nodes": [
+            "node1"
+          ],
+          "failure_nodes": [],
+          "unified_job_name": "deploy-vmware-vm",
+          "always_nodes": []
+        },
+        {
+          "name": "node1",
+          "unified_job_type": "inventory_update",
+          "success_nodes": [
+            "node2"
+          ],
+          "failure_nodes": [],
+          "unified_job_name": "test-source",
+          "always_nodes": []
+        },
+        {
+          "name": "node2",
+          "unified_job_type": "job",
+          "success_nodes": [
+            "node3"
+          ],
+          "failure_nodes": [],
+          "unified_job_name": "openshift jumpbox 3.11 deployer",
+          "always_nodes": []
+        },
+        {
+          "name": "node3",
+          "unified_job_type": "job",
+          "success_nodes": [],
+          "failure_nodes": [],
+          "unified_job_name": "deploy ansible tower",
+          "always_nodes": []
+        }
+      ],
+      "roles": [
+        {
+          "team": [],
+          "name": "Admin",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Read",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Execute",
+          "user": []
+        }
+      ],
+      "survey_spec": {
+        "description": "",
+        "name": "",
+        "spec": [
+          {
+            "question_description": "",
+            "min": null,
+            "default": "rhel7-template",
+            "max": null,
+            "required": true,
+            "choices": "rhel7-template\ncentos7-template",
+            "new_question": true,
+            "variable": "vm_template_name",
+            "question_name": "Deploy RHEL Deployment or Centos deployment?",
+            "type": "multiplechoice"
+          },
+          {
+            "question_description": "",
+            "min": 6,
+            "default": "jumpbox_server",
+            "max": 1024,
+            "required": true,
+            "choices": "",
+            "variable": "server_name",
+            "question_name": "Please enter server name",
+            "type": "text"
+          },
+          {
+            "question_description": "",
+            "min": 6,
+            "default": "ocp.example.com",
+            "max": 1024,
+            "required": true,
+            "choices": "",
+            "new_question": true,
+            "variable": "fqdn",
+            "question_name": "Enter your dns zone name (Example: ocp.example.com):",
+            "type": "text"
+          },
+          {
+            "question_description": "",
+            "min": 8,
+            "default": "192.168.1.10",
+            "max": 1024,
+            "required": true,
+            "choices": "",
+            "new_question": true,
+            "variable": "dns_server_ip",
+            "question_name": "Enter DNS Server ip",
+            "type": "text"
+          },
+          {
+            "required": true,
+            "min": 5,
+            "default": "blank",
+            "max": 1024,
+            "question_description": "",
+            "choices": "",
+            "new_question": true,
+            "variable": "rhel_username",
+            "question_name": "Enter username for subscription-manager",
+            "type": "text"
+          },
+          {
+            "question_description": "",
+            "min": 6,
+            "default": "changeme",
+            "max": 32,
+            "required": true,
+            "choices": "",
+            "new_question": true,
+            "variable": "rhel_password",
+            "question_name": "Enter password for subscription-manager",
+            "type": "password"
+          },
+          {
+            "required": true,
+            "min": 5,
+            "default": "exampleuser",
+            "max": 1024,
+            "question_description": "",
+            "choices": "",
+            "new_question": true,
+            "variable": "rhel_user",
+            "question_name": "Username of admin",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    "inventory": 8,
+    "organization": "Default",
+    "asset_type": "workflow",
+    "survey_enabled": true,
+    "name": "deploy_openshift_jumpbox"
+  },
+  {
+    "name": "deploy-dns-server",
+    "asset_type": "workflow",
+    "inventory": 7,
+    "organization": "Default",
+    "asset_relation": {
+      "labels": [],
+      "schedules": [],
+      "workflow_nodes": [
+        {
+          "name": "node0",
+          "unified_job_type": "job",
+          "success_nodes": [
+            "node3"
+          ],
+          "failure_nodes": [],
+          "unified_job_name": "provision-dns-server",
+          "extra_data": {
+            "rhel_username": null,
+            "rhel_password": null
+          },
+          "always_nodes": []
+        },
+        {
+          "name": "node1",
+          "unified_job_type": "job",
+          "success_nodes": [
+            "node4"
+          ],
+          "failure_nodes": [],
+          "unified_job_name": "restart VM",
+          "always_nodes": []
+        },
+        {
+          "name": "node2",
+          "unified_job_type": "job",
+          "success_nodes": [
+            "node5"
+          ],
+          "failure_nodes": [],
+          "unified_job_name": "deploy-vmware-vm",
+          "always_nodes": []
+        },
+        {
+          "name": "node3",
+          "unified_job_type": "job",
+          "success_nodes": [
+            "node1"
+          ],
+          "failure_nodes": [],
+          "unified_job_name": "dns-server-deploy-bind",
+          "always_nodes": []
+        },
+        {
+          "name": "node4",
+          "unified_job_type": "job",
+          "success_nodes": [],
+          "failure_nodes": [],
+          "unified_job_name": "dns-port-verification.yml",
+          "always_nodes": []
+        },
+        {
+          "name": "node5",
+          "unified_job_type": "inventory_update",
+          "success_nodes": [
+            "node0"
+          ],
+          "failure_nodes": [],
+          "unified_job_name": "test-source",
+          "always_nodes": []
+        }
+      ],
+      "roles": [
+        {
+          "team": [],
+          "name": "Admin",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Read",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Execute",
+          "user": []
+        }
+      ],
+      "survey_spec": {
+        "description": "",
+        "name": "",
+        "spec": [
+          {
+            "required": true,
+            "min": null,
+            "default": "rhel7-template",
+            "max": null,
+            "question_description": "",
+            "choices": "rhel7-template\ncentos7-template",
+            "variable": "vm_template_name",
+            "question_name": "Deploy RHEL Deployment or Centos deployment?",
+            "type": "multiplechoice"
+          },
+          {
+            "question_description": "",
+            "min": 6,
+            "default": "dns_server",
+            "max": 1024,
+            "required": true,
+            "choices": "",
+            "variable": "server_name",
+            "question_name": "Please enter server name",
+            "type": "text"
+          },
+          {
+            "question_description": "",
+            "min": 6,
+            "default": "example.com",
+            "max": 1024,
+            "required": true,
+            "choices": "",
+            "new_question": true,
+            "variable": "fqdn",
+            "question_name": "Enter your dns zone name (Example: example.com):",
+            "type": "text"
+          },
+          {
+            "required": true,
+            "min": 5,
+            "default": "blank",
+            "max": 1024,
+            "question_description": "",
+            "choices": "",
+            "new_question": true,
+            "variable": "rhel_username",
+            "question_name": "Enter username for subscription-manager",
+            "type": "text"
+          },
+          {
+            "required": true,
+            "min": 5,
+            "default": "changeme",
+            "max": 32,
+            "question_description": "",
+            "choices": "",
+            "new_question": true,
+            "variable": "rhel_password",
+            "question_name": "Enter password for subscription-manager",
+            "type": "password"
+          }
+        ]
+      }
+    },
+    "survey_enabled": true
+  },
+  {
+    "inventory": 1,
+    "asset_relation": {
+      "labels": [],
+      "schedules": [],
+      "workflow_nodes": [
+        {
+          "name": "node0",
+          "unified_job_type": "workflow_job",
+          "success_nodes": [
+            "node1"
+          ],
+          "failure_nodes": [],
+          "unified_job_name": "deploy_openshift_jumpbox",
+          "extra_data": {
+            "rhel_username": "takinosh@redhat.com",
+            "vm_template_name": "rhel7-template",
+            "rhel_user": "tosin",
+            "server_name": "jumpbox_server",
+            "rhel_password": "changeme",
+            "fqdn": "ocp.example.com"
+          },
+          "always_nodes": []
+        },
+        {
+          "name": "node1",
+          "unified_job_type": "workflow_job",
+          "success_nodes": [
+            "node2"
+          ],
+          "failure_nodes": [],
+          "unified_job_name": "deploy_openshift_master_node",
+          "extra_data": {
+            "vm_template_name": "rhel7-template",
+            "dns_server": "10.90.30.222",
+            "server_name": "master_server",
+            "rhel_password": "changeme",
+            "fqdn": "ocp.example.com",
+            "rhel_username": "takinosh@redhat.com",
+            "rhel_user": "tosin",
+            "glusterstorage": "true"
+          },
+          "always_nodes": []
+        },
+        {
+          "name": "node2",
+          "unified_job_type": "workflow_job",
+          "success_nodes": [],
+          "failure_nodes": [],
+          "unified_job_name": "deploy_openshift_worker_node",
+          "extra_data": {
+            "rhel_username": "takinosh@redhat.com",
+            "vm_template_name": "rhel7-template",
+            "dns_server": "10.90.30.222",
+            "rhel_user": "tosin",
+            "glusterstorage": "true",
+            "rhel_password": "changeme",
+            "fqdn": "ocp.example.com"
+          },
+          "always_nodes": []
+        }
+      ],
+      "roles": [
+        {
+          "team": [],
+          "name": "Admin",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Read",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Execute",
+          "user": []
+        }
+      ],
+      "survey_spec": {}
+    },
+    "asset_type": "workflow",
+    "name": "openshift_end_to_end_deployment"
+  },
+  {
+    "description": "deploy 3 worker  vms needed for openshift",
+    "allow_simultaneous": true,
+    "extra_vars": "---\nvmware_disk_size: 50\nvmware_ram_mb: 16384\nvm_cpu_count: 4\nvm_core_per_cpu: 1\nadddisk: true\nvmware_disk_two_size: 160",
+    "asset_relation": {
+      "labels": [],
+      "schedules": [],
+      "workflow_nodes": [
+        {
+          "name": "node0",
+          "unified_job_type": "job",
+          "success_nodes": [
+            "node2"
+          ],
+          "failure_nodes": [],
+          "unified_job_name": "deploy-vmware-vm",
+          "extra_data": {
+            "vm_cpu_count": 4,
+            "vmware_disk_two_size": 160,
+            "vmware_ram_mb": 16384,
+            "vmware_new_hostname": "node1",
+            "adddisk": true,
+            "vmware_disk_size": 50
+          },
+          "always_nodes": []
+        },
+        {
+          "name": "node1",
+          "unified_job_type": "job",
+          "success_nodes": [],
+          "failure_nodes": [],
+          "unified_job_name": "restart VM",
+          "always_nodes": []
+        },
+        {
+          "name": "node2",
+          "unified_job_type": "inventory_update",
+          "success_nodes": [
+            "node6"
+          ],
+          "failure_nodes": [],
+          "unified_job_name": "test-source",
+          "always_nodes": []
+        },
+        {
+          "name": "node3",
+          "unified_job_type": "job",
+          "success_nodes": [],
+          "failure_nodes": [],
+          "unified_job_name": "deploy-vmware-vm",
+          "extra_data": {
+            "vm_cpu_count": 4,
+            "vmware_disk_two_size": 160,
+            "vmware_ram_mb": 16384,
+            "vmware_new_hostname": "node3",
+            "adddisk": true,
+            "vmware_disk_size": 50
+          },
+          "always_nodes": []
+        },
+        {
+          "name": "node4",
+          "unified_job_type": "job",
+          "success_nodes": [],
+          "failure_nodes": [],
+          "unified_job_name": "deploy-vmware-vm",
+          "extra_data": {
+            "vm_cpu_count": 4,
+            "vmware_disk_two_size": 160,
+            "vmware_ram_mb": 16384,
+            "vmware_new_hostname": "node2",
+            "adddisk": true,
+            "vmware_disk_size": 50
+          },
+          "always_nodes": []
+        },
+        {
+          "name": "node5",
+          "unified_job_type": "job",
+          "success_nodes": [
+            "node1"
+          ],
+          "failure_nodes": [],
+          "unified_job_name": "openshift worker node config",
+          "always_nodes": []
+        },
+        {
+          "name": "node6",
+          "unified_job_type": "job",
+          "success_nodes": [
+            "node5"
+          ],
+          "failure_nodes": [],
+          "unified_job_name": "test-ssh-connection",
+          "always_nodes": []
+        }
+      ],
+      "roles": [
+        {
+          "team": [],
+          "name": "Admin",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Read",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Execute",
+          "user": []
+        }
+      ],
+      "survey_spec": {
+        "description": "",
+        "name": "",
+        "spec": [
+          {
+            "question_description": "",
+            "min": null,
+            "default": "rhel7-template",
+            "max": null,
+            "required": true,
+            "choices": "rhel7-template\ncentos7-template",
+            "new_question": true,
+            "variable": "vm_template_name",
+            "question_name": "Deploy RHEL Deployment or Centos deployment?",
+            "type": "multiplechoice"
+          },
+          {
+            "question_description": "",
+            "min": 6,
+            "default": "ocp.example.com",
+            "max": 1024,
+            "required": true,
+            "choices": "",
+            "new_question": true,
+            "variable": "fqdn",
+            "question_name": "Enter your dns zone name (Example: ocp.example.com):",
+            "type": "text"
+          },
+          {
+            "required": true,
+            "min": 5,
+            "default": "blank",
+            "max": 1024,
+            "question_description": "",
+            "choices": "",
+            "new_question": true,
+            "variable": "rhel_username",
+            "question_name": "Enter username for subscription-manager",
+            "type": "text"
+          },
+          {
+            "question_description": "",
+            "min": 6,
+            "default": "changeme",
+            "max": 32,
+            "required": true,
+            "choices": "",
+            "new_question": true,
+            "variable": "rhel_password",
+            "question_name": "Enter password for subscription-manager",
+            "type": "password"
+          },
+          {
+            "required": true,
+            "min": 5,
+            "default": "exampleuser",
+            "max": 1024,
+            "question_description": "",
+            "choices": "",
+            "new_question": true,
+            "variable": "rhel_user",
+            "question_name": "Username of admin",
+            "type": "text"
+          },
+          {
+            "question_description": "This would be used for CNS",
+            "min": null,
+            "default": "false",
+            "max": null,
+            "required": true,
+            "choices": "true\nfalse",
+            "variable": "glusterstorage",
+            "question_name": "Would you like to configure gluster?",
+            "type": "multiplechoice"
+          },
+          {
+            "required": true,
+            "min": 9,
+            "default": "192.168.1.5",
+            "max": 1024,
+            "question_description": "This will be the server that arecords will be written to.",
+            "choices": "",
+            "new_question": true,
+            "variable": "dns_server",
+            "question_name": "Enter DNS Server IP",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    "inventory": "",
+    "organization": "Default",
+    "asset_type": "workflow",
+    "survey_enabled": true,
+    "name": "deploy_openshift_worker_node"
+  },
+  {
+    "name": "add-dns-entry-for-openshift-nodes",
+    "asset_type": "workflow",
+    "inventory": 7,
+    "organization": "Default",
+    "asset_relation": {
+      "labels": [],
+      "schedules": [],
+      "workflow_nodes": [
+        {
+          "name": "node0",
+          "unified_job_type": "job",
+          "success_nodes": [
+            "node3",
+            "node4",
+            "node2"
+          ],
+          "failure_nodes": [],
+          "unified_job_name": "test dns server entry",
+          "extra_data": {
+            "dns_server_ip": "{{ dns_server_ip }}",
+            "a_record": "{{ master_a_record }}",
+            "ip_address": "{{ master_ip_address }}"
+          },
+          "always_nodes": []
+        },
+        {
+          "name": "node1",
+          "unified_job_type": "job",
+          "success_nodes": [
+            "node0"
+          ],
+          "failure_nodes": [],
+          "unified_job_name": "test dns server entry",
+          "extra_data": {
+            "dns_server_ip": "{{ dns_server_ip }}",
+            "a_record": "{{ jumpbox_a_record }}",
+            "ip_address": "{{ jumpbox_ip_address }}"
+          },
+          "always_nodes": []
+        },
+        {
+          "name": "node2",
+          "unified_job_type": "job",
+          "success_nodes": [],
+          "failure_nodes": [],
+          "unified_job_name": "test dns server entry",
+          "extra_data": {
+            "dns_server_ip": "{{ dns_server_ip }}",
+            "a_record": "{{ node1_a_record }}",
+            "ip_address": "{{ node1_ip_address }}"
+          },
+          "always_nodes": []
+        },
+        {
+          "name": "node3",
+          "unified_job_type": "job",
+          "success_nodes": [],
+          "failure_nodes": [],
+          "unified_job_name": "test dns server entry",
+          "extra_data": {
+            "dns_server_ip": "{{ dns_server_ip }}",
+            "a_record": "{{ node2_a_record }}",
+            "ip_address": "{{ node2_ip_address }}"
+          },
+          "always_nodes": []
+        },
+        {
+          "name": "node4",
+          "unified_job_type": "job",
+          "success_nodes": [],
+          "failure_nodes": [],
+          "unified_job_name": "test dns server entry",
+          "extra_data": {
+            "dns_server_ip": "{{ dns_server_ip }}",
+            "a_record": "{{ node3_a_record }}",
+            "ip_address": "{{ node3_ip_address }}"
+          },
+          "always_nodes": []
+        }
+      ],
+      "roles": [
+        {
+          "team": [],
+          "name": "Admin",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Read",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Execute",
+          "user": []
+        }
+      ],
+      "survey_spec": {
+        "description": "",
+        "spec": [
+          {
+            "required": true,
+            "min": 8,
+            "default": "changeme",
+            "max": 32,
+            "question_description": "",
+            "choices": "",
+            "new_question": true,
+            "variable": "vault_dns_key",
+            "question_name": "Enter vault dns key",
+            "type": "password"
+          },
+          {
+            "required": true,
+            "min": 6,
+            "default": "192.168.1.10",
+            "max": 1024,
+            "question_description": "",
+            "choices": "",
+            "new_question": true,
+            "variable": "dns_server_ip",
+            "question_name": "Enter DNS Server IP Address:",
+            "type": "text"
+          },
+          {
+            "question_description": "",
+            "min": 6,
+            "default": "jumpbox_server",
+            "max": 1024,
+            "required": true,
+            "choices": "",
+            "new_question": true,
+            "variable": "jumpbox_a_record",
+            "question_name": "Enter jumpbox a record:",
+            "type": "text"
+          },
+          {
+            "question_description": "",
+            "min": 8,
+            "default": "192.168.1.100",
+            "max": 1024,
+            "required": true,
+            "choices": "",
+            "new_question": true,
+            "variable": "jumpbox_ip_address",
+            "question_name": "Enter jumpbox  node ip address:",
+            "type": "text"
+          },
+          {
+            "question_description": "",
+            "min": 6,
+            "default": "master_server",
+            "max": 1024,
+            "required": true,
+            "choices": "",
+            "new_question": true,
+            "variable": "master_a_record",
+            "question_name": "Enter master a record:",
+            "type": "text"
+          },
+          {
+            "question_description": "",
+            "min": 8,
+            "default": "192.168.1.101",
+            "max": 1024,
+            "required": true,
+            "choices": "",
+            "new_question": true,
+            "variable": "master_ip_address",
+            "question_name": "Enter master node ip address",
+            "type": "text"
+          },
+          {
+            "question_description": "",
+            "min": 4,
+            "default": "node1",
+            "max": 1024,
+            "required": true,
+            "choices": "",
+            "new_question": true,
+            "variable": "node1_a_record",
+            "question_name": "Enter Node 1 a record:",
+            "type": "text"
+          },
+          {
+            "question_description": "",
+            "min": 7,
+            "default": "192.168.1.102",
+            "max": 1024,
+            "required": true,
+            "choices": "",
+            "new_question": true,
+            "variable": "node1_ip_address",
+            "question_name": "Enter node 1 ip address:",
+            "type": "text"
+          },
+          {
+            "question_description": "",
+            "min": 4,
+            "default": "node2",
+            "max": 1024,
+            "required": true,
+            "choices": "",
+            "new_question": true,
+            "variable": "node2_a_record",
+            "question_name": "Enter node 2 a record:",
+            "type": "text"
+          },
+          {
+            "question_description": "",
+            "min": 8,
+            "default": "192.168.1.103",
+            "max": 1024,
+            "required": true,
+            "choices": "",
+            "new_question": true,
+            "variable": "node3_ip_address",
+            "question_name": "Enter node 2 ip address",
+            "type": "text"
+          },
+          {
+            "question_description": "",
+            "min": 4,
+            "default": "node3",
+            "max": 1024,
+            "required": true,
+            "choices": "",
+            "new_question": true,
+            "variable": "node3_a_record",
+            "question_name": "Enter node 3 a record:",
+            "type": "text"
+          },
+          {
+            "question_description": "",
+            "min": 8,
+            "default": "192.168.1.104",
+            "max": 1024,
+            "required": true,
+            "choices": "",
+            "new_question": true,
+            "variable": "nod3_ip_address",
+            "question_name": "Enter node 3 ip address",
+            "type": "text"
+          }
+        ],
+        "name": ""
+      }
+    },
+    "survey_enabled": true
+  },
+  {
+    "organization": "Default",
+    "script": "#!/usr/bin/env python\n# -*- coding: utf-8 -*-\n#\n# Copyright (C): 2017, Ansible Project\n# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)\n\n# Requirements\n#   - pyvmomi >= 6.0.0.2016.4\n\n# TODO:\n#   * more jq examples\n#   * optional folder hierarchy\n\n\"\"\"\n$ jq '._meta.hostvars[].config' data.json | head\n{\n  \"alternateguestname\": \"\",\n  \"instanceuuid\": \"5035a5cd-b8e8-d717-e133-2d383eb0d675\",\n  \"memoryhotaddenabled\": false,\n  \"guestfullname\": \"Red Hat Enterprise Linux 7 (64-bit)\",\n  \"changeversion\": \"2016-05-16T18:43:14.977925Z\",\n  \"uuid\": \"4235fc97-5ddb-7a17-193b-9a3ac97dc7b4\",\n  \"cpuhotremoveenabled\": false,\n  \"vpmcenabled\": false,\n  \"firmware\": \"bios\",\n\"\"\"\n\nfrom __future__ import print_function\n\nimport atexit\nimport datetime\nimport itertools\nimport json\nimport os\nimport re\nimport ssl\nimport sys\nimport uuid\nfrom time import time\n\nfrom jinja2 import Environment\n\nfrom ansible.module_utils.six import integer_types, PY3\nfrom ansible.module_utils.six.moves import configparser\n\ntry:\n    import argparse\nexcept ImportError:\n    sys.exit('Error: This inventory script required \"argparse\" python module.  Please install it or upgrade to python-2.7')\n\ntry:\n    from pyVmomi import vim, vmodl\n    from pyVim.connect import SmartConnect, Disconnect\nexcept ImportError:\n    sys.exit(\"ERROR: This inventory script required 'pyVmomi' Python module, it was not able to load it\")\n\n\ndef regex_match(s, pattern):\n    '''Custom filter for regex matching'''\n    reg = re.compile(pattern)\n    if reg.match(s):\n        return True\n    else:\n        return False\n\n\ndef select_chain_match(inlist, key, pattern):\n    '''Get a key from a list of dicts, squash values to a single list, then filter'''\n    outlist = [x[key] for x in inlist]\n    outlist = list(itertools.chain(*outlist))\n    outlist = [x for x in outlist if regex_match(x, pattern)]\n    return outlist\n\n\nclass VMwareMissingHostException(Exception):\n    pass\n\n\nclass VMWareInventory(object):\n    __name__ = 'VMWareInventory'\n\n    guest_props = False\n    instances = []\n    debug = False\n    load_dumpfile = None\n    write_dumpfile = None\n    maxlevel = 1\n    lowerkeys = True\n    config = None\n    cache_max_age = None\n    cache_path_cache = None\n    cache_path_index = None\n    cache_dir = None\n    server = None\n    port = None\n    username = None\n    password = None\n    validate_certs = True\n    host_filters = []\n    skip_keys = []\n    groupby_patterns = []\n    groupby_custom_field_excludes = []\n\n    safe_types = [bool, str, float, None] + list(integer_types)\n    iter_types = [dict, list]\n\n    bad_types = ['Array', 'disabledMethod', 'declaredAlarmState']\n\n    vimTableMaxDepth = {\n        \"vim.HostSystem\": 2,\n        \"vim.VirtualMachine\": 2,\n    }\n\n    custom_fields = {}\n\n    # use jinja environments to allow for custom filters\n    env = Environment()\n    env.filters['regex_match'] = regex_match\n    env.filters['select_chain_match'] = select_chain_match\n\n    # translation table for attributes to fetch for known vim types\n\n    vimTable = {\n        vim.Datastore: ['_moId', 'name'],\n        vim.ResourcePool: ['_moId', 'name'],\n        vim.HostSystem: ['_moId', 'name'],\n    }\n\n    @staticmethod\n    def _empty_inventory():\n        return {\"_meta\": {\"hostvars\": {}}}\n\n    def __init__(self, load=True):\n        self.inventory = VMWareInventory._empty_inventory()\n\n        if load:\n            # Read settings and parse CLI arguments\n            self.parse_cli_args()\n            self.read_settings()\n\n            # Check the cache\n            cache_valid = self.is_cache_valid()\n\n            # Handle Cache\n            if self.args.refresh_cache or not cache_valid:\n                self.do_api_calls_update_cache()\n            else:\n                self.debugl('loading inventory from cache')\n                self.inventory = self.get_inventory_from_cache()\n\n    def debugl(self, text):\n        if self.args.debug:\n            try:\n                text = str(text)\n            except UnicodeEncodeError:\n                text = text.encode('ascii', 'ignore')\n            print('%s %s' % (datetime.datetime.now(), text))\n\n    def show(self):\n        # Data to print\n        self.debugl('dumping results')\n        data_to_print = None\n        if self.args.host:\n            data_to_print = self.get_host_info(self.args.host)\n        elif self.args.list:\n            # Display list of instances for inventory\n            data_to_print = self.inventory\n        return json.dumps(data_to_print, indent=2)\n\n    def is_cache_valid(self):\n        ''' Determines if the cache files have expired, or if it is still valid '''\n\n        valid = False\n\n        if os.path.isfile(self.cache_path_cache):\n            mod_time = os.path.getmtime(self.cache_path_cache)\n            current_time = time()\n            if (mod_time + self.cache_max_age) > current_time:\n                valid = True\n\n        return valid\n\n    def do_api_calls_update_cache(self):\n        ''' Get instances and cache the data '''\n        self.inventory = self.instances_to_inventory(self.get_instances())\n        self.write_to_cache(self.inventory)\n\n    def write_to_cache(self, data):\n        ''' Dump inventory to json file '''\n        with open(self.cache_path_cache, 'wb') as f:\n            f.write(json.dumps(data))\n\n    def get_inventory_from_cache(self):\n        ''' Read in jsonified inventory '''\n\n        jdata = None\n        with open(self.cache_path_cache, 'rb') as f:\n            jdata = f.read()\n        return json.loads(jdata)\n\n    def read_settings(self):\n        ''' Reads the settings from the vmware_inventory.ini file '''\n\n        scriptbasename = __file__\n        scriptbasename = os.path.basename(scriptbasename)\n        scriptbasename = scriptbasename.replace('.py', '')\n\n        defaults = {'vmware': {\n            'server': '',\n            'port': 443,\n            'username': '',\n            'password': '',\n            'validate_certs': True,\n            'ini_path': '/etc/ansible/vmware_inventory.ini',\n            'cache_name': 'ansible-vmware',\n            'cache_path': '~/.ansible/tmp',\n            'cache_max_age': 3600,\n            'max_object_level': 1,\n            'skip_keys': 'declaredalarmstate,'\n                         'disabledmethod,'\n                         'dynamicproperty,'\n                         'dynamictype,'\n                         'environmentbrowser,'\n                         'managedby,'\n                         'parent,'\n                         'childtype,'\n                         'resourceconfig',\n            'alias_pattern': '{{ config.name + \"_\" + config.uuid }}',\n            'host_pattern': '{{ guest.ipaddress }}',\n            'host_filters': '{{ runtime.powerstate == \"poweredOn\" }}',\n            'groupby_patterns': '{{ guest.guestid }},{{ \"templates\" if config.template else \"guests\"}}',\n            'lower_var_keys': True,\n            'custom_field_group_prefix': 'vmware_tag_',\n            'groupby_custom_field_excludes': '',\n            'groupby_custom_field': False}\n        }\n\n        if PY3:\n            config = configparser.ConfigParser()\n        else:\n            config = configparser.SafeConfigParser()\n\n        # where is the config?\n        vmware_ini_path = os.environ.get('VMWARE_INI_PATH', defaults['vmware']['ini_path'])\n        vmware_ini_path = os.path.expanduser(os.path.expandvars(vmware_ini_path))\n        config.read(vmware_ini_path)\n\n        if 'vmware' not in config.sections():\n            config.add_section('vmware')\n\n        # apply defaults\n        for k, v in defaults['vmware'].items():\n            if not config.has_option('vmware', k):\n                config.set('vmware', k, str(v))\n\n        # where is the cache?\n        self.cache_dir = os.path.expanduser(config.get('vmware', 'cache_path'))\n        if self.cache_dir and not os.path.exists(self.cache_dir):\n            os.makedirs(self.cache_dir)\n\n        # set the cache filename and max age\n        cache_name = config.get('vmware', 'cache_name')\n        self.cache_path_cache = self.cache_dir + \"/%s.cache\" % cache_name\n        self.debugl('cache path is %s' % self.cache_path_cache)\n        self.cache_max_age = int(config.getint('vmware', 'cache_max_age'))\n\n        # mark the connection info\n        self.server = os.environ.get('VMWARE_SERVER', config.get('vmware', 'server'))\n        self.debugl('server is %s' % self.server)\n        self.port = int(os.environ.get('VMWARE_PORT', config.get('vmware', 'port')))\n        self.username = os.environ.get('VMWARE_USERNAME', config.get('vmware', 'username'))\n        self.debugl('username is %s' % self.username)\n        self.password = os.environ.get('VMWARE_PASSWORD', config.get('vmware', 'password', raw=True))\n        self.validate_certs = os.environ.get('VMWARE_VALIDATE_CERTS', config.get('vmware', 'validate_certs'))\n        if self.validate_certs in ['no', 'false', 'False', False]:\n            self.validate_certs = False\n\n        self.debugl('cert validation is %s' % self.validate_certs)\n\n        # behavior control\n        self.maxlevel = int(config.get('vmware', 'max_object_level'))\n        self.debugl('max object level is %s' % self.maxlevel)\n        self.lowerkeys = config.get('vmware', 'lower_var_keys')\n        if type(self.lowerkeys) != bool:\n            if str(self.lowerkeys).lower() in ['yes', 'true', '1']:\n                self.lowerkeys = True\n            else:\n                self.lowerkeys = False\n        self.debugl('lower keys is %s' % self.lowerkeys)\n        self.skip_keys = list(config.get('vmware', 'skip_keys').split(','))\n        self.debugl('skip keys is %s' % self.skip_keys)\n        temp_host_filters = list(config.get('vmware', 'host_filters').split('}},'))\n        for host_filter in temp_host_filters:\n            host_filter = host_filter.rstrip()\n            if host_filter != \"\":\n                if not host_filter.endswith(\"}}\"):\n                    host_filter += \"}}\"\n                self.host_filters.append(host_filter)\n        self.debugl('host filters are %s' % self.host_filters)\n\n        temp_groupby_patterns = list(config.get('vmware', 'groupby_patterns').split('}},'))\n        for groupby_pattern in temp_groupby_patterns:\n            groupby_pattern = groupby_pattern.rstrip()\n            if groupby_pattern != \"\":\n                if not groupby_pattern.endswith(\"}}\"):\n                    groupby_pattern += \"}}\"\n                self.groupby_patterns.append(groupby_pattern)\n        self.debugl('groupby patterns are %s' % self.groupby_patterns)\n        temp_groupby_custom_field_excludes = config.get('vmware', 'groupby_custom_field_excludes')\n        self.groupby_custom_field_excludes = [x.strip('\"') for x in [y.strip(\"'\") for y in temp_groupby_custom_field_excludes.split(\",\")]]\n        self.debugl('groupby exclude strings are %s' % self.groupby_custom_field_excludes)\n\n        # Special feature to disable the brute force serialization of the\n        # virtual machine objects. The key name for these properties does not\n        # matter because the values are just items for a larger list.\n        if config.has_section('properties'):\n            self.guest_props = []\n            for prop in config.items('properties'):\n                self.guest_props.append(prop[1])\n\n        # save the config\n        self.config = config\n\n    def parse_cli_args(self):\n        ''' Command line argument processing '''\n\n        parser = argparse.ArgumentParser(description='Produce an Ansible Inventory file based on PyVmomi')\n        parser.add_argument('--debug', action='store_true', default=False,\n                            help='show debug info')\n        parser.add_argument('--list', action='store_true', default=True,\n                            help='List instances (default: True)')\n        parser.add_argument('--host', action='store',\n                            help='Get all the variables about a specific instance')\n        parser.add_argument('--refresh-cache', action='store_true', default=False,\n                            help='Force refresh of cache by making API requests to VSphere (default: False - use cache files)')\n        parser.add_argument('--max-instances', default=None, type=int,\n                            help='maximum number of instances to retrieve')\n        self.args = parser.parse_args()\n\n    def get_instances(self):\n        ''' Get a list of vm instances with pyvmomi '''\n        kwargs = {'host': self.server,\n                  'user': self.username,\n                  'pwd': self.password,\n                  'port': int(self.port)}\n\n        if hasattr(ssl, 'SSLContext') and not self.validate_certs:\n            context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)\n            context.verify_mode = ssl.CERT_NONE\n            kwargs['sslContext'] = context\n\n        return self._get_instances(kwargs)\n\n    def _get_instances(self, inkwargs):\n        ''' Make API calls '''\n        instances = []\n        try:\n            si = SmartConnect(**inkwargs)\n        except ssl.SSLError as connection_error:\n            if '[SSL: CERTIFICATE_VERIFY_FAILED]' in str(connection_error) and self.validate_certs:\n                sys.exit(\"Unable to connect to ESXi server due to %s, \"\n                         \"please specify validate_certs=False and try again\" % connection_error)\n\n        except Exception as exc:\n            self.debugl(\"Unable to connect to ESXi server due to %s\" % exc)\n            sys.exit(\"Unable to connect to ESXi server due to %s\" % exc)\n\n        self.debugl('retrieving all instances')\n        if not si:\n            sys.exit(\"Could not connect to the specified host using specified \"\n                     \"username and password\")\n        atexit.register(Disconnect, si)\n        content = si.RetrieveContent()\n\n        # Create a search container for virtualmachines\n        self.debugl('creating containerview for virtualmachines')\n        container = content.rootFolder\n        viewType = [vim.VirtualMachine]\n        recursive = True\n        containerView = content.viewManager.CreateContainerView(container, viewType, recursive)\n        children = containerView.view\n        for child in children:\n            # If requested, limit the total number of instances\n            if self.args.max_instances:\n                if len(instances) >= self.args.max_instances:\n                    break\n            instances.append(child)\n        self.debugl(\"%s total instances in container view\" % len(instances))\n\n        if self.args.host:\n            instances = [x for x in instances if x.name == self.args.host]\n\n        instance_tuples = []\n        for instance in sorted(instances):\n            if self.guest_props:\n                ifacts = self.facts_from_proplist(instance)\n            else:\n                ifacts = self.facts_from_vobj(instance)\n            instance_tuples.append((instance, ifacts))\n        self.debugl('facts collected for all instances')\n\n        try:\n            cfm = content.customFieldsManager\n            if cfm is not None and cfm.field:\n                for f in cfm.field:\n                    if not f.managedObjectType or f.managedObjectType == vim.VirtualMachine:\n                        self.custom_fields[f.key] = f.name\n                self.debugl('%d custom fields collected' % len(self.custom_fields))\n        except vmodl.RuntimeFault as exc:\n            self.debugl(\"Unable to gather custom fields due to %s\" % exc.msg)\n        except IndexError as exc:\n            self.debugl(\"Unable to gather custom fields due to %s\" % exc)\n\n        return instance_tuples\n\n    def instances_to_inventory(self, instances):\n        ''' Convert a list of vm objects into a json compliant inventory '''\n        self.debugl('re-indexing instances based on ini settings')\n        inventory = VMWareInventory._empty_inventory()\n        inventory['all'] = {}\n        inventory['all']['hosts'] = []\n        for idx, instance in enumerate(instances):\n            # make a unique id for this object to avoid vmware's\n            # numerous uuid's which aren't all unique.\n            thisid = str(uuid.uuid4())\n            idata = instance[1]\n\n            # Put it in the inventory\n            inventory['all']['hosts'].append(thisid)\n            inventory['_meta']['hostvars'][thisid] = idata.copy()\n            inventory['_meta']['hostvars'][thisid]['ansible_uuid'] = thisid\n\n        # Make a map of the uuid to the alias the user wants\n        name_mapping = self.create_template_mapping(\n            inventory,\n            self.config.get('vmware', 'alias_pattern')\n        )\n\n        # Make a map of the uuid to the ssh hostname the user wants\n        host_mapping = self.create_template_mapping(\n            inventory,\n            self.config.get('vmware', 'host_pattern')\n        )\n\n        # Reset the inventory keys\n        for k, v in name_mapping.items():\n\n            if not host_mapping or k not in host_mapping:\n                continue\n\n            # set ansible_host (2.x)\n            try:\n                inventory['_meta']['hostvars'][k]['ansible_host'] = host_mapping[k]\n                # 1.9.x backwards compliance\n                inventory['_meta']['hostvars'][k]['ansible_ssh_host'] = host_mapping[k]\n            except Exception:\n                continue\n\n            if k == v:\n                continue\n\n            # add new key\n            inventory['all']['hosts'].append(v)\n            inventory['_meta']['hostvars'][v] = inventory['_meta']['hostvars'][k]\n\n            # cleanup old key\n            inventory['all']['hosts'].remove(k)\n            inventory['_meta']['hostvars'].pop(k, None)\n\n        self.debugl('pre-filtered hosts:')\n        for i in inventory['all']['hosts']:\n            self.debugl('  * %s' % i)\n        # Apply host filters\n        for hf in self.host_filters:\n            if not hf:\n                continue\n            self.debugl('filter: %s' % hf)\n            filter_map = self.create_template_mapping(inventory, hf, dtype='boolean')\n            for k, v in filter_map.items():\n                if not v:\n                    # delete this host\n                    inventory['all']['hosts'].remove(k)\n                    inventory['_meta']['hostvars'].pop(k, None)\n\n        self.debugl('post-filter hosts:')\n        for i in inventory['all']['hosts']:\n            self.debugl('  * %s' % i)\n\n        # Create groups\n        for gbp in self.groupby_patterns:\n            groupby_map = self.create_template_mapping(inventory, gbp)\n            for k, v in groupby_map.items():\n                if v not in inventory:\n                    inventory[v] = {}\n                    inventory[v]['hosts'] = []\n                if k not in inventory[v]['hosts']:\n                    inventory[v]['hosts'].append(k)\n\n        if self.config.get('vmware', 'groupby_custom_field'):\n            for k, v in inventory['_meta']['hostvars'].items():\n                if 'customvalue' in v:\n                    for tv in v['customvalue']:\n                        newkey = None\n                        field_name = self.custom_fields[tv['key']] if tv['key'] in self.custom_fields else tv['key']\n                        if field_name in self.groupby_custom_field_excludes:\n                            continue\n                        values = []\n                        keylist = map(lambda x: x.strip(), tv['value'].split(','))\n                        for kl in keylist:\n                            try:\n                                newkey = \"%s%s_%s\" % (self.config.get('vmware', 'custom_field_group_prefix'), str(field_name), kl)\n                                newkey = newkey.strip()\n                            except Exception as e:\n                                self.debugl(e)\n                            values.append(newkey)\n                        for tag in values:\n                            if not tag:\n                                continue\n                            if tag not in inventory:\n                                inventory[tag] = {}\n                                inventory[tag]['hosts'] = []\n                            if k not in inventory[tag]['hosts']:\n                                inventory[tag]['hosts'].append(k)\n\n        return inventory\n\n    def create_template_mapping(self, inventory, pattern, dtype='string'):\n        ''' Return a hash of uuid to templated string from pattern '''\n        mapping = {}\n        for k, v in inventory['_meta']['hostvars'].items():\n            t = self.env.from_string(pattern)\n            newkey = None\n            try:\n                newkey = t.render(v)\n                newkey = newkey.strip()\n            except Exception as e:\n                self.debugl(e)\n            if not newkey:\n                continue\n            elif dtype == 'integer':\n                newkey = int(newkey)\n            elif dtype == 'boolean':\n                if newkey.lower() == 'false':\n                    newkey = False\n                elif newkey.lower() == 'true':\n                    newkey = True\n            elif dtype == 'string':\n                pass\n            mapping[k] = newkey\n        return mapping\n\n    def facts_from_proplist(self, vm):\n        '''Get specific properties instead of serializing everything'''\n\n        rdata = {}\n        for prop in self.guest_props:\n            self.debugl('getting %s property for %s' % (prop, vm.name))\n            key = prop\n            if self.lowerkeys:\n                key = key.lower()\n\n            if '.' not in prop:\n                # props without periods are direct attributes of the parent\n                vm_property = getattr(vm, prop)\n                if isinstance(vm_property, vim.CustomFieldsManager.Value.Array):\n                    temp_vm_property = []\n                    for vm_prop in vm_property:\n                        temp_vm_property.append({'key': vm_prop.key,\n                                                 'value': vm_prop.value})\n                    rdata[key] = temp_vm_property\n                else:\n                    rdata[key] = vm_property\n            else:\n                # props with periods are subkeys of parent attributes\n                parts = prop.split('.')\n                total = len(parts) - 1\n\n                # pointer to the current object\n                val = None\n                # pointer to the current result key\n                lastref = rdata\n\n                for idx, x in enumerate(parts):\n\n                    if isinstance(val, dict):\n                        if x in val:\n                            val = val.get(x)\n                        elif x.lower() in val:\n                            val = val.get(x.lower())\n                    else:\n                        # if the val wasn't set yet, get it from the parent\n                        if not val:\n                            try:\n                                val = getattr(vm, x)\n                            except AttributeError as e:\n                                self.debugl(e)\n                        else:\n                            # in a subkey, get the subprop from the previous attrib\n                            try:\n                                val = getattr(val, x)\n                            except AttributeError as e:\n                                self.debugl(e)\n\n                        # make sure it serializes\n                        val = self._process_object_types(val)\n\n                    # lowercase keys if requested\n                    if self.lowerkeys:\n                        x = x.lower()\n\n                    # change the pointer or set the final value\n                    if idx != total:\n                        if x not in lastref:\n                            lastref[x] = {}\n                        lastref = lastref[x]\n                    else:\n                        lastref[x] = val\n        if self.args.debug:\n            self.debugl(\"For %s\" % vm.name)\n            for key in list(rdata.keys()):\n                if isinstance(rdata[key], dict):\n                    for ikey in list(rdata[key].keys()):\n                        self.debugl(\"Property '%s.%s' has value '%s'\" % (key, ikey, rdata[key][ikey]))\n                else:\n                    self.debugl(\"Property '%s' has value '%s'\" % (key, rdata[key]))\n        return rdata\n\n    def facts_from_vobj(self, vobj, level=0):\n        ''' Traverse a VM object and return a json compliant data structure '''\n\n        # pyvmomi objects are not yet serializable, but may be one day ...\n        # https://github.com/vmware/pyvmomi/issues/21\n\n        # WARNING:\n        # Accessing an object attribute will trigger a SOAP call to the remote.\n        # Increasing the attributes collected or the depth of recursion greatly\n        # increases runtime duration and potentially memory+network utilization.\n\n        if level == 0:\n            try:\n                self.debugl(\"get facts for %s\" % vobj.name)\n            except Exception as e:\n                self.debugl(e)\n\n        rdata = {}\n\n        methods = dir(vobj)\n        methods = [str(x) for x in methods if not x.startswith('_')]\n        methods = [x for x in methods if x not in self.bad_types]\n        methods = [x for x in methods if not x.lower() in self.skip_keys]\n        methods = sorted(methods)\n\n        for method in methods:\n            # Attempt to get the method, skip on fail\n            try:\n                methodToCall = getattr(vobj, method)\n            except Exception as e:\n                continue\n\n            # Skip callable methods\n            if callable(methodToCall):\n                continue\n\n            if self.lowerkeys:\n                method = method.lower()\n\n            rdata[method] = self._process_object_types(\n                methodToCall,\n                thisvm=vobj,\n                inkey=method,\n            )\n\n        return rdata\n\n    def _process_object_types(self, vobj, thisvm=None, inkey='', level=0):\n        ''' Serialize an object '''\n        rdata = {}\n\n        if type(vobj).__name__ in self.vimTableMaxDepth and level >= self.vimTableMaxDepth[type(vobj).__name__]:\n            return rdata\n\n        if vobj is None:\n            rdata = None\n        elif type(vobj) in self.vimTable:\n            rdata = {}\n            for key in self.vimTable[type(vobj)]:\n                try:\n                    rdata[key] = getattr(vobj, key)\n                except Exception as e:\n                    self.debugl(e)\n\n        elif issubclass(type(vobj), str) or isinstance(vobj, str):\n            if vobj.isalnum():\n                rdata = vobj\n            else:\n                rdata = vobj.decode('ascii', 'ignore')\n        elif issubclass(type(vobj), bool) or isinstance(vobj, bool):\n            rdata = vobj\n        elif issubclass(type(vobj), integer_types) or isinstance(vobj, integer_types):\n            rdata = vobj\n        elif issubclass(type(vobj), float) or isinstance(vobj, float):\n            rdata = vobj\n        elif issubclass(type(vobj), list) or issubclass(type(vobj), tuple):\n            rdata = []\n            try:\n                vobj = sorted(vobj)\n            except Exception:\n                pass\n\n            for idv, vii in enumerate(vobj):\n                if level + 1 <= self.maxlevel:\n                    vid = self._process_object_types(\n                        vii,\n                        thisvm=thisvm,\n                        inkey=inkey + '[' + str(idv) + ']',\n                        level=(level + 1)\n                    )\n\n                    if vid:\n                        rdata.append(vid)\n\n        elif issubclass(type(vobj), dict):\n            pass\n\n        elif issubclass(type(vobj), object):\n            methods = dir(vobj)\n            methods = [str(x) for x in methods if not x.startswith('_')]\n            methods = [x for x in methods if x not in self.bad_types]\n            methods = [x for x in methods if not inkey + '.' + x.lower() in self.skip_keys]\n            methods = sorted(methods)\n\n            for method in methods:\n                # Attempt to get the method, skip on fail\n                try:\n                    methodToCall = getattr(vobj, method)\n                except Exception as e:\n                    continue\n\n                if callable(methodToCall):\n                    continue\n\n                if self.lowerkeys:\n                    method = method.lower()\n                if level + 1 <= self.maxlevel:\n                    try:\n                        rdata[method] = self._process_object_types(\n                            methodToCall,\n                            thisvm=thisvm,\n                            inkey=inkey + '.' + method,\n                            level=(level + 1)\n                        )\n                    except vim.fault.NoPermission:\n                        self.debugl(\"Skipping method %s (NoPermission)\" % method)\n        else:\n            pass\n\n        return rdata\n\n    def get_host_info(self, host):\n        ''' Return hostvars for a single host '''\n\n        if host in self.inventory['_meta']['hostvars']:\n            return self.inventory['_meta']['hostvars'][host]\n        elif self.args.host and self.inventory['_meta']['hostvars']:\n            match = None\n            for k, v in self.inventory['_meta']['hostvars'].items():\n                if self.inventory['_meta']['hostvars'][k]['name'] == self.args.host:\n                    match = k\n                    break\n            if match:\n                return self.inventory['_meta']['hostvars'][match]\n            else:\n                raise VMwareMissingHostException('%s not found' % host)\n        else:\n            raise VMwareMissingHostException('%s not found' % host)\n\n\nif __name__ == \"__main__\":\n    # Run the script\n    print(VMWareInventory().show())\n",
+    "asset_type": "inventory_script",
+    "name": "vmware_inventory.py"
+  },
+  {
+    "name": "Demo Project",
+    "scm_url": "https://github.com/ansible/ansible-tower-samples",
+    "asset_relation": {
+      "notification_templates_error": [],
+      "notification_templates_success": [],
+      "roles": [
+        {
+          "team": [],
+          "name": "Admin",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Read",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Use",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Update",
+          "user": []
+        }
+      ],
+      "schedules": []
+    },
+    "scm_type": "git",
+    "scm_update_on_launch": true,
+    "organization": "Default",
+    "asset_type": "project"
+  },
+  {
+    "credential": "gitlab-info",
+    "scm_branch": "master",
+    "name": "openshift-ansible-tower",
+    "scm_clean": true,
+    "scm_url": "https://gitlab.consulting.redhat.com/rto/openshift-ansible-tower.git",
+    "asset_relation": {
+      "notification_templates_error": [],
+      "notification_templates_success": [],
+      "roles": [
+        {
+          "team": [],
+          "name": "Admin",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Read",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Use",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Update",
+          "user": []
+        }
+      ],
+      "schedules": []
+    },
+    "scm_type": "git",
+    "organization": "Default",
+    "asset_type": "project"
+  },
+  {
+    "asset_relation": {
+      "roles": [
+        {
+          "team": [],
+          "name": "Credential Admin",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Read",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Member",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Execute",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Admin",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Notification Admin",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Workflow Admin",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Job Template Admin",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Project Admin",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Auditor",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Inventory Admin",
+          "user": []
+        }
+      ]
+    },
+    "asset_type": "organization",
+    "name": "Default"
+  },
+  {
+    "host_filter": "search=dns_server",
+    "kind": "smart",
+    "name": "dns_server",
+    "asset_type": "inventory",
+    "organization": "Default",
+    "asset_relation": {
+      "inventory_source": [],
+      "host": [],
+      "group": [],
+      "roles": [
+        {
+          "team": [],
+          "name": "Admin",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Read",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Use",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Update",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Ad Hoc",
+          "user": []
+        }
+      ]
+    }
+  },
+  {
+    "host_filter": "search=jumpbox",
+    "kind": "smart",
+    "name": "jumpbox",
+    "asset_type": "inventory",
+    "organization": "Default",
+    "asset_relation": {
+      "inventory_source": [],
+      "host": [],
+      "group": [],
+      "roles": [
+        {
+          "team": [],
+          "name": "Ad Hoc",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Admin",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Read",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Use",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Update",
+          "user": []
+        }
+      ]
+    }
+  },
+  {
+    "organization": "Default",
+    "variables": "---",
+    "asset_relation": {
+      "inventory_source": [],
+      "host": [
+        {
+          "variables": "ansible_connection: local",
+          "name": "localhost"
+        }
+      ],
+      "group": [],
+      "roles": [
+        {
+          "team": [],
+          "name": "Ad Hoc",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Admin",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Read",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Use",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Update",
+          "user": []
+        }
+      ]
+    },
+    "asset_type": "inventory",
+    "name": "localhost-inventory"
+  },
+  {
+    "host_filter": "search=master",
+    "kind": "smart",
+    "name": "master",
+    "asset_type": "inventory",
+    "organization": "Default",
+    "asset_relation": {
+      "inventory_source": [],
+      "host": [],
+      "group": [],
+      "roles": [
+        {
+          "team": [],
+          "name": "Ad Hoc",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Admin",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Read",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Use",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Update",
+          "user": []
+        }
+      ]
+    }
+  },
+  {
+    "host_filter": "search=node",
+    "kind": "smart",
+    "name": "nodes",
+    "asset_type": "inventory",
+    "organization": "Default",
+    "asset_relation": {
+      "inventory_source": [],
+      "host": [],
+      "group": [],
+      "roles": [
+        {
+          "team": [],
+          "name": "Ad Hoc",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Admin",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Read",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Use",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Update",
+          "user": []
+        }
+      ]
+    }
+  },
+  {
+    "organization": "Default",
+    "variables": "---",
+    "asset_relation": {
+      "inventory_source": [
+        {
+          "credential": "vmware-credentials",
+          "name": "test-source",
+          "source": "custom",
+          "source_script": "vmware_inventory.py",
+          "schedules": []
+        }
+      ],
+      "host": [],
+      "group": [],
+      "roles": [
+        {
+          "team": [],
+          "name": "Ad Hoc",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Admin",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Read",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Use",
+          "user": []
+        },
+        {
+          "team": [],
+          "name": "Update",
+          "user": []
+        }
+      ]
+    },
+    "asset_type": "inventory",
+    "name": "vmware-inventory"
+  }
+]
