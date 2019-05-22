@@ -1784,7 +1784,7 @@
         {
           "name": "node0",
           "unified_job_type": "job",
-          "success_nodes": [], 
+          "success_nodes": [],
           "failure_nodes": [],
           "unified_job_name": "dns server workflow update A record",
           "always_nodes": []
@@ -2199,9 +2199,6 @@
     "scm_type": "git",
     "organization": "Default",
     "asset_type": "project"
-  },
-  {
-    "asset_type": "user"
   },
   {
     "asset_relation": {
