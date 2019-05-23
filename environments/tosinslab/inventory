@@ -24,7 +24,7 @@ node3.ocp.helloworld.com glusterfs_ip=0.0.0.0 glusterfs_zone=3 glusterfs_devices
 
 
 [OSEv3:vars]
-ansible_ssh_user=helloworld
+ansible_ssh_user=tosin
 ansible_become=true
 debug_level=2
 openshift_release=v3.11.98
