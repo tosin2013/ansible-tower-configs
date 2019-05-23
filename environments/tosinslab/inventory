@@ -31,8 +31,7 @@ openshift_release=v3.11.98
 openshift_deployment_type=openshift-enterprise
 
 oreg_url=registry.redhat.io/openshift3/ose-${component}:${version}
-oreg_auth_user=changeme@helloworld.com
-oreg_auth_password=ChAngemYP@ssW0rD
+# Moved oreg_auth_user and oreg_auth_password to tower survey under the OpenShift  Prerequisites job.
 
 openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider'}]
 openshift_master_htpasswd_file=/home/tosin/openshift-ansible/passwordFile
