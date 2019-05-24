@@ -42,7 +42,7 @@ openshift_master_default_subdomain=apps.ocp.example.com
 
 #openshift operators
 openshift_enable_olm=true
-openshift_additional_registry_credentials=[{'host':'registry.connect.redhat.com','user':'takinosh@redhat.com','password':'c5Xe-d2D4fVM7OlErZHe','test_image':'mongodb/enterprise-operator:0.3.2'}]
+openshift_additional_registry_credentials=[{'host':'registry.connect.redhat.com','user':'example@example.com','password':'changemypassword','test_image':'mongodb/enterprise-operator:0.3.2'}]
 
 # registry
 openshift_hosted_registry_storage_kind=glusterfs
