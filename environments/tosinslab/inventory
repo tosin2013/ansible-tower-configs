@@ -27,9 +27,8 @@ node3.ocp.helloworld.com glusterfs_ip=0.0.0.0 glusterfs_zone=3 glusterfs_devices
 ansible_ssh_user=tosin
 ansible_become=true
 debug_level=2
-openshift_release=v3.11.98
+openshift_release=v3.11.98-6
 openshift_deployment_type=openshift-enterprise
-version=v3.11.98-7
 
 oreg_url=registry.redhat.io/openshift3/ose-${component}:${version}
 # Moved oreg_auth_user and oreg_auth_password to tower survey under the OpenShift  Prerequisites job.

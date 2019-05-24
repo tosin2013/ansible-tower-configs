@@ -32,7 +32,7 @@ SCM UPDATE OPTIONS: CLEAN and DELETE ON UPDATE
 
 * run configure-infra-jobs.sh based off infrastructure
   - refer to scripts/configure-vmware-jobs.sh
-  - tower-cli send towerconfigs/ansible-tower-configuration-v0.0.3.json
+  - tower-cli send towerconfigs/ansible-tower-configuration-v0.0.4.json
 * confirm there are no errors in configuration push
 *  mkdir /root/ose3.11
 * touch /root/ose3.11/ansible-hosts
@@ -41,7 +41,7 @@ SCM UPDATE OPTIONS: CLEAN and DELETE ON UPDATE
 
 ```
 #/bin/bash
-AWXDIRECTORYNAME="ose3.11"
+AWXDIRECTORYNAME="exampleenv/cnsinventory"
 AWXINVENTORYNAME="OSE_3.11"
 
 tower-manage inventory_import --source=/root/environments/${AWXDIRECTORYNAME} --inventory-name="$AWXINVENTORYNAME" --overwrite --overwrite-vars
@@ -53,7 +53,7 @@ tower-manage inventory_import --source=/root/environments/${AWXDIRECTORYNAME} --
 
 
 ## OpenShift Deployment Steps on VMWARE WIP
-* Configure your dns server workflow then run Deploy DNS Server
+1. Configure your dns server workflow then run Deploy DNS Server
   - WF - Deploy DNS Server
 * Deploy jumpbox to target vmware environment
 * Configure jumpbox on target vmware environment and start deployment
