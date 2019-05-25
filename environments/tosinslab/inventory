@@ -27,7 +27,7 @@ node3.ocp.helloworld.com glusterfs_ip=0.0.0.0 glusterfs_zone=3 glusterfs_devices
 ansible_ssh_user=tosin
 ansible_become=true
 debug_level=2
-openshift_release=v3.11.98-6
+openshift_release=v3.11
 openshift_deployment_type=openshift-enterprise
 
 oreg_url=registry.redhat.io/openshift3/ose-${component}:${version}
