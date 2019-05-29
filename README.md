@@ -32,7 +32,7 @@ SCM UPDATE OPTIONS: CLEAN and DELETE ON UPDATE
 
 * run configure-infra-jobs.sh based off infrastructure
   - refer to scripts/configure-vmware-jobs.sh
-  - tower-cli send towerconfigs/ansible-tower-configuration-v0.0.4.json
+  - tower-cli send towerconfigs/ansible-tower-configuration-v0.0.6.json
 * confirm there are no errors in configuration push
 *  mkdir /root/ose3.11
 * touch /root/ose3.11/ansible-hosts
