@@ -29,10 +29,16 @@ SCM CREDENTIAL:  gitlab-credentials
 SCM UPDATE OPTIONS: CLEAN and DELETE ON UPDATE
 # Save and refresh project
 ```
+* ssh onto ansible server and  git clone ansible-tower-configs
+```
+git clone https://gitlab.consulting.redhat.com/rto/ansible-tower-configs.git
+```
+### Notes
+default template rhel75-vmw-tpl
 
 * run configure-infra-jobs.sh based off infrastructure
   - refer to scripts/configure-vmware-jobs.sh
-  - tower-cli send towerconfigs/ansible-tower-configuration-v0.0.6.json
+  - tower-cli send towerconfigs/ansible-tower-configuration-v0.0.7.json
 * confirm there are no errors in configuration push
 *  mkdir /root/ose3.11
 * touch /root/ose3.11/ansible-hosts

@@ -8,7 +8,7 @@ tower-cli login admin
 
 # Notes
 # https://github.com/ansible/tower-cli/issues/581
-tower-cli send towerconfigs/ansible-tower-configuration-v0.0.3.json
+tower-cli send towerconfigs/ansible-tower-configuration-v0.0.7.json
 
 mkdir /root/ose3.11
 touch /root/ose3.11/ansible-hosts
