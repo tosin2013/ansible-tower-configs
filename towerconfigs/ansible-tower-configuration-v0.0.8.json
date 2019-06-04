@@ -1,0 +1,4159 @@
+[
+    {
+      "inputs": {
+        "username": "example@example.com", 
+        "password": ""
+      }, 
+      "name": "gitlab-credentials", 
+      "asset_type": "credential", 
+      "credential_type": "Source Control", 
+      "organization": "Default", 
+      "asset_relation": {
+        "roles": [
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": [
+              "admin"
+            ]
+          }, 
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Use", 
+            "user": []
+          }
+        ]
+      }
+    }, 
+    {
+      "inputs": {
+        "username": "username", 
+        "password": "", 
+        "become_password": ""
+      }, 
+      "name": "server-credentials", 
+      "asset_type": "credential", 
+      "credential_type": "Machine", 
+      "organization": "Default", 
+      "asset_relation": {
+        "roles": [
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": [
+              "admin"
+            ]
+          }, 
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Use", 
+            "user": []
+          }
+        ]
+      }
+    }, 
+    {
+      "credential_type": "VMware vCenter", 
+      "inputs": {
+        "username": "administrator@vsphere.local", 
+        "host": "vsphere.example.com", 
+        "password": ""
+      }, 
+      "asset_relation": {
+        "roles": [
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": [
+              "admin"
+            ]
+          }, 
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Use", 
+            "user": []
+          }
+        ]
+      }, 
+      "asset_type": "credential", 
+      "name": "vmware-credentials"
+    }, 
+    {
+      "credential": "server-credentials", 
+      "name": "CONFIGURE A DNS WILDCARD", 
+      "ask_variables_on_launch": true, 
+      "extra_vars": "---\ndns_key_name: example.key\ndns_server_ip: '{{ dns_server }}'\ndns_zone: ocp.example.com\nuser_data_file: /etc/named/example.key.\na_record: '*.apps'", 
+      "asset_relation": {
+        "extra_credentials": [], 
+        "notification_templates_error": [], 
+        "notification_templates_success": [], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Execute", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": [
+              "admin"
+            ]
+          }
+        ], 
+        "labels": [], 
+        "schedules": [], 
+        "survey_spec": {}
+      }, 
+      "project": "openshift-ansible-tower", 
+      "inventory": "dnsserver", 
+      "become_enabled": true, 
+      "asset_type": "job_template", 
+      "playbook": "dns-server-update-dns-wildcard-entry.yml"
+    }, 
+    {
+      "credential": "server-credentials", 
+      "name": "Configure Bind Server", 
+      "extra_vars": "---\nmaster_server_ip: \"{{ ansible_default_ipv4.address }}\"\nzone_network: \"{{ ansible_default_ipv4.address.split('.')[0:3] | join('.') }}\"\nzone_ip: \"{{ ansible_default_ipv4.address }}\"\nbind_forwarders: [1.1.1.1,8.8.8.8]", 
+      "asset_relation": {
+        "extra_credentials": [], 
+        "notification_templates_error": [], 
+        "notification_templates_success": [], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Execute", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": [
+              "admin"
+            ]
+          }
+        ], 
+        "labels": [], 
+        "schedules": [], 
+        "survey_spec": {}
+      }, 
+      "project": "openshift-ansible-tower", 
+      "ask_inventory_on_launch": true, 
+      "playbook": "dns-server-deploy.yml", 
+      "asset_type": "job_template", 
+      "become_enabled": true
+    }, 
+    {
+      "credential": "server-credentials", 
+      "name": "Configure Chrony", 
+      "ask_variables_on_launch": true, 
+      "extra_vars": "chrony_config_server:\n  - 0.rhel.pool.ntp.org\n  - 1.rhel.pool.ntp.org", 
+      "asset_relation": {
+        "extra_credentials": [], 
+        "notification_templates_error": [], 
+        "notification_templates_success": [], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Execute", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": [
+              "admin"
+            ]
+          }
+        ], 
+        "labels": [], 
+        "schedules": [], 
+        "survey_spec": {}
+      }, 
+      "project": "openshift-ansible-tower", 
+      "ask_inventory_on_launch": true, 
+      "playbook": "configure-chrony.yml", 
+      "asset_type": "job_template", 
+      "become_enabled": true
+    }, 
+    {
+      "diff_mode": true, 
+      "name": "Configure DNS server for OpenShift", 
+      "credential": "server-credentials", 
+      "ask_variables_on_launch": true, 
+      "extra_vars": "key_name: example.key\nserver_ip: ansible_tower_ip\nzone_name: ocp.example.com", 
+      "asset_relation": {
+        "extra_credentials": [], 
+        "notification_templates_error": [], 
+        "notification_templates_success": [], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Execute", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": [
+              "admin"
+            ]
+          }
+        ], 
+        "labels": [], 
+        "schedules": [], 
+        "survey_spec": {}
+      }, 
+      "project": "openshift-ansible-tower", 
+      "inventory": "dnsserver", 
+      "become_enabled": true, 
+      "asset_type": "job_template", 
+      "playbook": "dns-server-configure-for-openshift.yml"
+    }, 
+    {
+      "credential": "server-credentials", 
+      "name": "Configure .htpasswd credentials", 
+      "asset_relation": {
+        "extra_credentials": [], 
+        "notification_templates_error": [], 
+        "notification_templates_success": [], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Execute", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": [
+              "admin"
+            ]
+          }
+        ], 
+        "labels": [], 
+        "schedules": [], 
+        "survey_spec": {}
+      }, 
+      "project": "openshift-ansible-tower", 
+      "inventory": "localhost-inventory", 
+      "asset_type": "job_template", 
+      "playbook": "configure-htpasswd.yml"
+    }, 
+    {
+      "credential": "server-credentials", 
+      "name": "Configure Tower For OpenShift Deployments", 
+      "extra_vars": "---\n#repo_url: https://gitlab.consulting.redhat.com/rto/ansible-tower-configs.git\nbranch: master\nansible_tower_config: ansible-tower-configuration-v0.0.8.json\nawxinventorypath: \"exampleenv/minimal\"\nawxinventoryname: \"OSE_3.11\"", 
+      "asset_relation": {
+        "extra_credentials": [], 
+        "notification_templates_error": [], 
+        "notification_templates_success": [], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Execute", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": [
+              "admin"
+            ]
+          }
+        ], 
+        "labels": [], 
+        "schedules": [], 
+        "survey_spec": {
+          "description": "", 
+          "name": "", 
+          "spec": [
+            {
+              "question_description": "", 
+              "min": 4, 
+              "default": "exampleuser", 
+              "max": 1024, 
+              "required": true, 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "gitlabuser", 
+              "question_name": "Enter Gitlab Username", 
+              "type": "text"
+            }, 
+            {
+              "question_description": "", 
+              "min": 6, 
+              "default": "changeme", 
+              "max": 32, 
+              "required": true, 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "gitlabpassword", 
+              "question_name": "Enter Gitlab Password", 
+              "type": "password"
+            }, 
+            {
+              "question_description": "This will be used to configure the newly deployed tower instance.", 
+              "min": 4, 
+              "default": "changeme", 
+              "max": 32, 
+              "required": true, 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "tower_password", 
+              "question_name": "Enter Ansible tower password", 
+              "type": "password"
+            }, 
+            {
+              "question_description": "", 
+              "min": null, 
+              "default": "True", 
+              "max": null, 
+              "required": true, 
+              "choices": "True\nFalse", 
+              "new_question": true, 
+              "variable": "skip_tower_config", 
+              "question_name": "Perform Ansible Tower configuration?", 
+              "type": "multiplechoice"
+            }
+          ]
+        }
+      }, 
+      "project": "openshift-ansible-tower", 
+      "inventory": "jumpbox", 
+      "become_enabled": true, 
+      "asset_type": "job_template", 
+      "survey_enabled": true, 
+      "playbook": "configure-ansible-tower-jumpbox.yml"
+    }, 
+    {
+      "credential": "server-credentials", 
+      "name": "Deploy Ansible Tower", 
+      "extra_vars": "#https://docs.ansible.com/ansible-tower/latest/html/release-notes/relnotes.html\n---\ntower_setup_version: \"3.3.3-1\"\ntower_setup_dir: \"/opt\"\ntower_setup_admin_password: \"admin\"\ntower_setup_pg_database: \"tower\"\ntower_setup_pg_password: \"tower\"\ntower_setup_rabbitmq_pass: \"tower\"", 
+      "asset_relation": {
+        "extra_credentials": [], 
+        "notification_templates_error": [], 
+        "notification_templates_success": [], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Execute", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": [
+              "admin"
+            ]
+          }
+        ], 
+        "labels": [], 
+        "schedules": [], 
+        "survey_spec": {}
+      }, 
+      "project": "openshift-ansible-tower", 
+      "ask_inventory_on_launch": true, 
+      "playbook": "ansible-tower-provision.yml", 
+      "asset_type": "job_template", 
+      "become_enabled": true
+    }, 
+    {
+      "credential": "server-credentials", 
+      "name": "Deploy OpenShift Cluster", 
+      "asset_relation": {
+        "extra_credentials": [], 
+        "notification_templates_error": [], 
+        "notification_templates_success": [], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Execute", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": [
+              "admin"
+            ]
+          }
+        ], 
+        "labels": [], 
+        "schedules": [], 
+        "survey_spec": {
+          "description": "", 
+          "name": "", 
+          "spec": [
+            {
+              "required": true, 
+              "min": 4, 
+              "default": "exampleuser", 
+              "max": 1024, 
+              "question_description": "BROKER SUPPORT FOR AUTHENTICATED REGISTRIES", 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "oreg_auth_user", 
+              "question_name": "Enter oreg_auth_user", 
+              "type": "text"
+            }, 
+            {
+              "question_description": "BROKER SUPPORT FOR AUTHENTICATED REGISTRIES PASSWORD", 
+              "min": 6, 
+              "default": "changeme", 
+              "max": 32, 
+              "required": true, 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "oreg_auth_password", 
+              "question_name": "ENTER oreg_auth_password", 
+              "type": "password"
+            }
+          ]
+        }
+      }, 
+      "project": "ansible-openshift", 
+      "ask_inventory_on_launch": true, 
+      "playbook": "playbooks/deploy_cluster.yml", 
+      "asset_type": "job_template", 
+      "survey_enabled": true, 
+      "become_enabled": true
+    }, 
+    {
+      "name": "Deploy  Virtual Machine on VMWARE", 
+      "allow_simultaneous": true, 
+      "ask_variables_on_launch": true, 
+      "extra_vars": "diskcount: 1\nvm_core_per_cpu: 1\nvm_cpu_count: 1\nvmware_datacenter: Default-DataCenter\nvmware_datastore: DefaultCluster\nvmware_disk_size: 20\nvmware_folder: /\nvmware_network: VM Network\nvmware_new_hostname: '{{ server_name }}'\nvmware_ram_mb: 2048\nvmware_state: poweredon\nvmware_template_name: '{{ vm_template_name }}'", 
+      "asset_relation": {
+        "extra_credentials": [
+          "vmware-credentials"
+        ], 
+        "notification_templates_error": [], 
+        "notification_templates_success": [], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Execute", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": [
+              "admin"
+            ]
+          }
+        ], 
+        "labels": [], 
+        "schedules": [], 
+        "survey_spec": {}
+      }, 
+      "project": "openshift-ansible-tower", 
+      "inventory": "localhost-inventory", 
+      "asset_type": "job_template", 
+      "playbook": "infrastructure-provision-vmware-virtual-machine.yml"
+    }, 
+    {
+      "credential": "server-credentials", 
+      "name": "DNS port Verification", 
+      "extra_vars": "---\nport_num: 53\ndefault_timeout: 10", 
+      "asset_relation": {
+        "extra_credentials": [], 
+        "notification_templates_error": [], 
+        "notification_templates_success": [], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Execute", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": [
+              "admin"
+            ]
+          }
+        ], 
+        "labels": [], 
+        "schedules": [], 
+        "survey_spec": {}
+      }, 
+      "project": "openshift-ansible-tower", 
+      "ask_inventory_on_launch": true, 
+      "playbook": "dns-port-verification.yml", 
+      "asset_type": "job_template", 
+      "become_enabled": true
+    }, 
+    {
+      "credential": "server-credentials", 
+      "name": "dns server workflow update A record", 
+      "asset_relation": {
+        "extra_credentials": [], 
+        "notification_templates_error": [], 
+        "notification_templates_success": [], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Execute", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": [
+              "admin"
+            ]
+          }
+        ], 
+        "labels": [], 
+        "schedules": [], 
+        "survey_spec": {}
+      }, 
+      "project": "openshift-ansible-tower", 
+      "inventory": "dnsserver", 
+      "playbook": "dns-server-update-entry.yml", 
+      "asset_type": "job_template", 
+      "become_enabled": true
+    }, 
+    {
+      "credential": "server-credentials", 
+      "name": "OpenShift jumpbox 3.11 deployer", 
+      "asset_relation": {
+        "extra_credentials": [], 
+        "notification_templates_error": [], 
+        "notification_templates_success": [], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Execute", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": [
+              "admin"
+            ]
+          }
+        ], 
+        "labels": [], 
+        "schedules": [], 
+        "survey_spec": {}
+      }, 
+      "project": "openshift-ansible-tower", 
+      "ask_inventory_on_launch": true, 
+      "playbook": "infrastructure-provision-vmware-jumpbox-v3.11.yml", 
+      "asset_type": "job_template", 
+      "become_enabled": true
+    }, 
+    {
+      "credential": "server-credentials", 
+      "name": "OpenShift master node config", 
+      "asset_relation": {
+        "extra_credentials": [], 
+        "notification_templates_error": [], 
+        "notification_templates_success": [], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Execute", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": [
+              "admin"
+            ]
+          }
+        ], 
+        "labels": [], 
+        "schedules": [], 
+        "survey_spec": {}
+      }, 
+      "project": "openshift-ansible-tower", 
+      "ask_inventory_on_launch": true, 
+      "playbook": "infrastructure-provision-vmware-openshift-nodes-v3.11.yml", 
+      "asset_type": "job_template", 
+      "become_enabled": true
+    }, 
+    {
+      "name": "OpenShift Preinstallation Checks", 
+      "ask_credential_on_launch": true, 
+      "ask_variables_on_launch": true, 
+      "extra_vars": "---\nnode_names:\n - master\n - node1\n - node2\n - node3\n - node4\nfqdn: ocp.example.com\nremote_registry: registry.redhat.io", 
+      "verbosity": 1, 
+      "asset_relation": {
+        "extra_credentials": [], 
+        "notification_templates_error": [], 
+        "notification_templates_success": [], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Execute", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": [
+              "admin"
+            ]
+          }
+        ], 
+        "labels": [], 
+        "schedules": [], 
+        "survey_spec": {}
+      }, 
+      "project": "openshift-ansible-tower", 
+      "ask_inventory_on_launch": true, 
+      "playbook": "openshift-pre-installation-checks.yml", 
+      "asset_type": "job_template"
+    }, 
+    {
+      "credential": "server-credentials", 
+      "name": "OpenShift  Prerequisites", 
+      "asset_relation": {
+        "extra_credentials": [], 
+        "notification_templates_error": [], 
+        "notification_templates_success": [], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Execute", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": [
+              "admin"
+            ]
+          }
+        ], 
+        "labels": [], 
+        "schedules": [], 
+        "survey_spec": {
+          "description": "", 
+          "spec": [
+            {
+              "required": true, 
+              "min": 4, 
+              "default": "exampleuser", 
+              "max": 1024, 
+              "question_description": "BROKER SUPPORT FOR AUTHENTICATED REGISTRIES", 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "oreg_auth_user", 
+              "question_name": "Enter oreg_auth_user", 
+              "type": "text"
+            }, 
+            {
+              "required": true, 
+              "min": 5, 
+              "default": "changeme", 
+              "max": 32, 
+              "question_description": "BROKER SUPPORT FOR AUTHENTICATED REGISTRIES PASSWORD", 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "oreg_auth_password", 
+              "question_name": "ENTER oreg_auth_password", 
+              "type": "password"
+            }
+          ], 
+          "name": ""
+        }
+      }, 
+      "project": "ansible-openshift", 
+      "ask_inventory_on_launch": true, 
+      "playbook": "playbooks/prerequisites.yml", 
+      "asset_type": "job_template", 
+      "survey_enabled": true, 
+      "become_enabled": true
+    }, 
+    {
+      "credential": "server-credentials", 
+      "name": "OpenShift Uninstall", 
+      "asset_relation": {
+        "extra_credentials": [], 
+        "notification_templates_error": [], 
+        "notification_templates_success": [], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Execute", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": [
+              "admin"
+            ]
+          }
+        ], 
+        "labels": [], 
+        "schedules": [], 
+        "survey_spec": {}
+      }, 
+      "project": "ansible-openshift", 
+      "ask_inventory_on_launch": true, 
+      "playbook": "playbooks/adhoc/uninstall.yml", 
+      "asset_type": "job_template", 
+      "become_enabled": true
+    }, 
+    {
+      "credential": "server-credentials", 
+      "name": "OpenShift worker node config", 
+      "asset_relation": {
+        "extra_credentials": [], 
+        "notification_templates_error": [], 
+        "notification_templates_success": [], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Execute", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": [
+              "admin"
+            ]
+          }
+        ], 
+        "labels": [], 
+        "schedules": [], 
+        "survey_spec": {}
+      }, 
+      "project": "openshift-ansible-tower", 
+      "ask_inventory_on_launch": true, 
+      "playbook": "infrastructure-provision-vmware-openshift-nodes-v3.11.yml", 
+      "asset_type": "job_template", 
+      "become_enabled": true
+    }, 
+    {
+      "credential": "server-credentials", 
+      "asset_relation": {
+        "extra_credentials": [], 
+        "notification_templates_error": [], 
+        "notification_templates_success": [], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Execute", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": [
+              "admin"
+            ]
+          }
+        ], 
+        "labels": [], 
+        "schedules": [], 
+        "survey_spec": {}
+      }, 
+      "description": "this will pause the workflow", 
+      "ask_variables_on_launch": true, 
+      "extra_vars": "---\n# time in seconds\ntimout_val: 30", 
+      "name": "Pause workflow", 
+      "project": "openshift-ansible-tower", 
+      "inventory": "localhost-inventory", 
+      "asset_type": "job_template", 
+      "playbook": "sleep.yml"
+    }, 
+    {
+      "credential": "server-credentials", 
+      "name": "Provision DNS Server", 
+      "asset_relation": {
+        "extra_credentials": [], 
+        "notification_templates_error": [], 
+        "notification_templates_success": [], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Execute", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": [
+              "admin"
+            ]
+          }
+        ], 
+        "labels": [], 
+        "schedules": [], 
+        "survey_spec": {}
+      }, 
+      "project": "openshift-ansible-tower", 
+      "ask_inventory_on_launch": true, 
+      "playbook": "dns-server-provisioning.yml", 
+      "asset_type": "job_template", 
+      "become_enabled": true
+    }, 
+    {
+      "credential": "server-credentials", 
+      "asset_relation": {
+        "extra_credentials": [], 
+        "notification_templates_error": [], 
+        "notification_templates_success": [], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Execute", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": [
+              "admin"
+            ]
+          }
+        ], 
+        "labels": [], 
+        "schedules": [], 
+        "survey_spec": {}
+      }, 
+      "description": "resize hard drive if template hard drive is smaller on vmware node", 
+      "name": "Resize /dev/sd* hard drive", 
+      "project": "openshift-ansible-tower", 
+      "inventory": "master", 
+      "become_enabled": true, 
+      "asset_type": "job_template", 
+      "playbook": "openshift-resize-check.yml"
+    }, 
+    {
+      "credential": "server-credentials", 
+      "name": "Restart VM", 
+      "asset_relation": {
+        "extra_credentials": [], 
+        "notification_templates_error": [], 
+        "notification_templates_success": [], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Execute", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": [
+              "admin"
+            ]
+          }
+        ], 
+        "labels": [], 
+        "schedules": [], 
+        "survey_spec": {}
+      }, 
+      "project": "openshift-ansible-tower", 
+      "ask_inventory_on_launch": true, 
+      "playbook": "restart_vm.yml", 
+      "asset_type": "job_template", 
+      "become_enabled": true
+    }, 
+    {
+      "credential": "server-credentials", 
+      "description": "Set the hostname of VM to include FQDN", 
+      "ask_variables_on_launch": true, 
+      "extra_vars": "---\nnode_names:\n - master\n - node1\n - node2\n - node3\n - node4\nfqdn: ocp.example.com", 
+      "asset_relation": {
+        "extra_credentials": [], 
+        "notification_templates_error": [], 
+        "notification_templates_success": [], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Execute", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": [
+              "admin"
+            ]
+          }
+        ], 
+        "labels": [], 
+        "schedules": [], 
+        "survey_spec": {}
+      }, 
+      "project": "openshift-ansible-tower", 
+      "ask_inventory_on_launch": true, 
+      "playbook": "infrastructure-provision-vmware-set-hostname.yml", 
+      "become_enabled": true, 
+      "asset_type": "job_template", 
+      "name": "Set the hostname of VM"
+    }, 
+    {
+      "credential": "server-credentials", 
+      "name": "Test jumpbox for Ansible tower connection", 
+      "extra_vars": "---\nport_num: 443", 
+      "asset_relation": {
+        "extra_credentials": [], 
+        "notification_templates_error": [], 
+        "notification_templates_success": [], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Execute", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": [
+              "admin"
+            ]
+          }
+        ], 
+        "labels": [], 
+        "schedules": [], 
+        "survey_spec": {}
+      }, 
+      "project": "openshift-ansible-tower", 
+      "ask_inventory_on_launch": true, 
+      "playbook": "dns-port-verification.yml", 
+      "asset_type": "job_template", 
+      "become_enabled": true
+    }, 
+    {
+      "credential": "server-credentials", 
+      "name": "Test ssh connection OpenShift node", 
+      "allow_simultaneous": true, 
+      "extra_vars": "---\nport_num: 22\ndefault_timeout: 180", 
+      "asset_relation": {
+        "extra_credentials": [], 
+        "notification_templates_error": [], 
+        "notification_templates_success": [], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Execute", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": [
+              "admin"
+            ]
+          }
+        ], 
+        "labels": [], 
+        "schedules": [], 
+        "survey_spec": {}
+      }, 
+      "project": "openshift-ansible-tower", 
+      "ask_inventory_on_launch": true, 
+      "playbook": "dns-port-verification.yml", 
+      "asset_type": "job_template"
+    }, 
+    {
+      "credential": "server-credentials", 
+      "name": "update A record for OpenShift node", 
+      "ask_variables_on_launch": true, 
+      "extra_vars": "---\ndns_key_name: example.key\ndns_server_ip: '{{ dns_server }}'\ndns_zone: ocp.example.com\nuser_data_file: /etc/named/example.key.", 
+      "asset_relation": {
+        "extra_credentials": [], 
+        "notification_templates_error": [], 
+        "notification_templates_success": [], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Execute", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": [
+              "admin"
+            ]
+          }
+        ], 
+        "labels": [], 
+        "schedules": [], 
+        "survey_spec": {}
+      }, 
+      "project": "openshift-ansible-tower", 
+      "inventory": "dnsserver", 
+      "become_enabled": true, 
+      "asset_type": "job_template", 
+      "playbook": "dns-server-update-openshift-nodes-entry.yml"
+    }, 
+    {
+      "credential": "server-credentials", 
+      "name": "Validate DNS Server Entry", 
+      "extra_vars": "---\na_record: test\ndns_key_name: example.key\ndns_server_ip: '{{ ansible_default_ipv4.address }}'\ndns_zone: ocp.example.com\nip_address: use_dummy_ip_to_test_a_record\nuser_data_file: /etc/named/example.key", 
+      "asset_relation": {
+        "extra_credentials": [], 
+        "notification_templates_error": [], 
+        "notification_templates_success": [], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Execute", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": [
+              "admin"
+            ]
+          }
+        ], 
+        "labels": [], 
+        "schedules": [], 
+        "survey_spec": {}
+      }, 
+      "project": "openshift-ansible-tower", 
+      "ask_inventory_on_launch": true, 
+      "playbook": "dns-server-update-entry.yml", 
+      "asset_type": "job_template", 
+      "become_enabled": true
+    }, 
+    {
+      "name": "Wipe vmware vm", 
+      "ask_variables_on_launch": true, 
+      "extra_vars": "---\nvcenter_cluster: null\nvcenter_datacenter: vsphere.example.com\nvm_name: test", 
+      "asset_relation": {
+        "extra_credentials": [
+          "vmware-credentials"
+        ], 
+        "notification_templates_error": [], 
+        "notification_templates_success": [], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Execute", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": [
+              "admin"
+            ]
+          }
+        ], 
+        "labels": [], 
+        "schedules": [], 
+        "survey_spec": {}
+      }, 
+      "project": "openshift-ansible-tower", 
+      "inventory": "localhost-inventory", 
+      "asset_type": "job_template", 
+      "playbook": "infrastructure-delete-vmware-virtual-machine.yml"
+    }, 
+    {
+      "extra_vars": "---\nvcenter_datacenter:  vsphere.example.com\nvcenter_cluster: null", 
+      "asset_relation": {
+        "labels": [], 
+        "schedules": [], 
+        "workflow_nodes": [
+          {
+            "name": "node0", 
+            "unified_job_type": "job", 
+            "success_nodes": [], 
+            "failure_nodes": [], 
+            "unified_job_name": "Wipe vmware vm", 
+            "extra_data": {
+              "vm_name": "node4", 
+              "vcenter_cluster": null
+            }, 
+            "always_nodes": [
+              "node6"
+            ]
+          }, 
+          {
+            "name": "node1", 
+            "unified_job_type": "job", 
+            "success_nodes": [], 
+            "failure_nodes": [], 
+            "unified_job_name": "Wipe vmware vm", 
+            "extra_data": {
+              "vm_name": "node2"
+            }, 
+            "always_nodes": [
+              "node4"
+            ]
+          }, 
+          {
+            "name": "node2", 
+            "unified_job_type": "job", 
+            "success_nodes": [], 
+            "failure_nodes": [], 
+            "unified_job_name": "Wipe vmware vm", 
+            "extra_data": {
+              "vm_name": "node1"
+            }, 
+            "always_nodes": [
+              "node1"
+            ]
+          }, 
+          {
+            "name": "node3", 
+            "unified_job_type": "job", 
+            "success_nodes": [], 
+            "failure_nodes": [], 
+            "unified_job_name": "Wipe vmware vm", 
+            "extra_data": {
+              "vm_name": "master"
+            }, 
+            "always_nodes": [
+              "node2"
+            ]
+          }, 
+          {
+            "name": "node4", 
+            "unified_job_type": "job", 
+            "success_nodes": [], 
+            "failure_nodes": [], 
+            "unified_job_name": "Wipe vmware vm", 
+            "extra_data": {
+              "vm_name": "node3", 
+              "vcenter_cluster": null
+            }, 
+            "always_nodes": [
+              "node0"
+            ]
+          }, 
+          {
+            "name": "node5", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node7"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "Wipe vmware vm", 
+            "extra_data": {
+              "vm_name": "node6", 
+              "vcenter_cluster": null
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node6", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node5"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "Wipe vmware vm", 
+            "extra_data": {
+              "vm_name": "node5", 
+              "vcenter_cluster": null
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node7", 
+            "unified_job_type": "inventory_update", 
+            "success_nodes": [], 
+            "failure_nodes": [], 
+            "unified_job_name": "vmware-datacenter-x", 
+            "always_nodes": []
+          }
+        ], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Execute", 
+            "user": []
+          }
+        ], 
+        "survey_spec": {}
+      }, 
+      "organization": "Default", 
+      "asset_type": "workflow", 
+      "name": "WF - Wipe OpenShift Deployment  - CNS Example"
+    }, 
+    {
+      "name": "WF - End to End OpenShift Deployment - Minimal Example", 
+      "allow_simultaneous": true, 
+      "asset_type": "workflow", 
+      "organization": "Default", 
+      "asset_relation": {
+        "labels": [], 
+        "schedules": [], 
+        "workflow_nodes": [
+          {
+            "name": "node0", 
+            "unified_job_type": "job", 
+            "success_nodes": [], 
+            "failure_nodes": [], 
+            "unified_job_name": "update A record for OpenShift node", 
+            "always_nodes": []
+          }, 
+          {
+            "credential": "server-credentials", 
+            "name": "node1", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node22"
+            ], 
+            "inventory": "OSE_3.11", 
+            "failure_nodes": [], 
+            "unified_job_name": "OpenShift Preinstallation Checks", 
+            "extra_data": {
+              "node_names": [
+                "master", 
+                "node1", 
+                "node2", 
+                "node3", 
+                "node4"
+              ]
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node2", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node20"
+            ], 
+            "inventory": "master", 
+            "failure_nodes": [], 
+            "unified_job_name": "Test ssh connection OpenShift node", 
+            "always_nodes": []
+          }, 
+          {
+            "credential": "server-credentials", 
+            "name": "node3", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node1"
+            ], 
+            "inventory": "dnsserver", 
+            "failure_nodes": [], 
+            "unified_job_name": "OpenShift Preinstallation Checks", 
+            "extra_data": {
+              "node_names": [
+                "master", 
+                "node1", 
+                "node2", 
+                "node3", 
+                "node4"
+              ]
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node4", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node31"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "Pause workflow", 
+            "extra_data": {
+              "timout_val": 180
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node5", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node17"
+            ], 
+            "inventory": "nodes", 
+            "failure_nodes": [], 
+            "unified_job_name": "Set the hostname of VM", 
+            "extra_data": {
+              "node_names": [
+                "master", 
+                "node1", 
+                "node2", 
+                "node3", 
+                "node4"
+              ]
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node6", 
+            "unified_job_type": "inventory_update", 
+            "success_nodes": [
+              "node27"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "vmware-datacenter-x", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node7", 
+            "unified_job_type": "job", 
+            "success_nodes": [], 
+            "failure_nodes": [], 
+            "unified_job_name": "update A record for OpenShift node", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node8", 
+            "unified_job_type": "job", 
+            "success_nodes": [], 
+            "inventory": "nodes", 
+            "failure_nodes": [], 
+            "unified_job_name": "Test ssh connection OpenShift node", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node9", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node0"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "Deploy  Virtual Machine on VMWARE", 
+            "extra_data": {
+              "vm_cpu_count": 2, 
+              "vmware_disk_two_size": 180, 
+              "vmware_ram_mb": 8192, 
+              "vmware_new_hostname": "node4", 
+              "diskcount": 2, 
+              "vmware_disk_size": 50
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node10", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node13"
+            ], 
+            "inventory": "nodes", 
+            "failure_nodes": [], 
+            "unified_job_name": "Configure Chrony", 
+            "extra_data": {
+              "chrony_config_server": [
+                "0.rhel.pool.ntp.org", 
+                "1.rhel.pool.ntp.org"
+              ]
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node11", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node29"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "Deploy  Virtual Machine on VMWARE", 
+            "extra_data": {
+              "vm_cpu_count": 2, 
+              "vmware_disk_two_size": 180, 
+              "vmware_ram_mb": 8192, 
+              "vmware_new_hostname": "node2", 
+              "diskcount": 2, 
+              "vmware_disk_size": 50
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node12", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node7", 
+              "node21"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "Deploy  Virtual Machine on VMWARE", 
+            "extra_data": {
+              "vm_cpu_count": 2, 
+              "vmware_disk_two_size": 180, 
+              "vmware_ram_mb": 8192, 
+              "vmware_new_hostname": "node1", 
+              "diskcount": 2, 
+              "vmware_disk_size": 50
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node13", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node8"
+            ], 
+            "inventory": "nodes", 
+            "failure_nodes": [], 
+            "unified_job_name": "Restart VM", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node14", 
+            "unified_job_type": "job", 
+            "success_nodes": [], 
+            "failure_nodes": [], 
+            "unified_job_name": "update A record for OpenShift node", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node15", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node24"
+            ], 
+            "inventory": "master", 
+            "failure_nodes": [], 
+            "unified_job_name": "Test ssh connection OpenShift node", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node16", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node6"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "Deploy  Virtual Machine on VMWARE", 
+            "extra_data": {
+              "vm_cpu_count": 4, 
+              "vmware_disk_two_size": 180, 
+              "vmware_ram_mb": 16384, 
+              "vmware_new_hostname": "master", 
+              "diskcount": 2, 
+              "vmware_disk_size": 50
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node17", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node10"
+            ], 
+            "inventory": "nodes", 
+            "failure_nodes": [], 
+            "unified_job_name": "OpenShift worker node config", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node18", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node2"
+            ], 
+            "inventory": "master", 
+            "failure_nodes": [], 
+            "unified_job_name": "Restart VM", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node19", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node5"
+            ], 
+            "inventory": "nodes", 
+            "failure_nodes": [], 
+            "unified_job_name": "Test ssh connection OpenShift node", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node20", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node3"
+            ], 
+            "inventory": "OSE_3.11", 
+            "failure_nodes": [], 
+            "unified_job_name": "Test ssh connection OpenShift node", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node21", 
+            "unified_job_type": "job", 
+            "success_nodes": [], 
+            "failure_nodes": [], 
+            "unified_job_name": "CONFIGURE A DNS WILDCARD", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node22", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node30"
+            ], 
+            "inventory": "OSE_3.11", 
+            "failure_nodes": [], 
+            "unified_job_name": "OpenShift  Prerequisites", 
+            "extra_data": {
+              "oreg_auth_user": "exampleuser"
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node23", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node18"
+            ], 
+            "inventory": "master", 
+            "failure_nodes": [], 
+            "unified_job_name": "Configure Chrony", 
+            "extra_data": {
+              "chrony_config_server": [
+                "0.rhel.pool.ntp.org", 
+                "1.rhel.pool.ntp.org"
+              ]
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node24", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node32"
+            ], 
+            "inventory": "master", 
+            "failure_nodes": [], 
+            "unified_job_name": "Set the hostname of VM", 
+            "extra_data": {
+              "node_names": [
+                "master"
+              ]
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node25", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node14"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "Deploy  Virtual Machine on VMWARE", 
+            "extra_data": {
+              "vm_cpu_count": 2, 
+              "vmware_disk_two_size": 180, 
+              "vmware_ram_mb": 8192, 
+              "vmware_new_hostname": "node3", 
+              "diskcount": 2, 
+              "vmware_disk_size": 50
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node26", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node28"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "Pause workflow", 
+            "extra_data": {
+              "timout_val": 500
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node27", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node15"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "update A record for OpenShift node", 
+            "extra_data": {
+              "vault_dns_key": "{{ vault_dns_key }}", 
+              "user_data_file": "/etc/named/example.key."
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node28", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node23"
+            ], 
+            "inventory": "master", 
+            "failure_nodes": [], 
+            "unified_job_name": "OpenShift master node config", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node29", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node4"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "update A record for OpenShift node", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node30", 
+            "unified_job_type": "job", 
+            "success_nodes": [], 
+            "inventory": "OSE_3.11", 
+            "failure_nodes": [], 
+            "unified_job_name": "Deploy OpenShift Cluster", 
+            "extra_data": {
+              "oreg_auth_user": "exampleuser"
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node31", 
+            "unified_job_type": "inventory_update", 
+            "success_nodes": [
+              "node19"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "vmware-datacenter-x", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node32", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node26"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "Resize /dev/sd* hard drive", 
+            "always_nodes": []
+          }
+        ], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Execute", 
+            "user": []
+          }
+        ], 
+        "survey_spec": {
+          "description": "", 
+          "name": "", 
+          "spec": [
+            {
+              "required": true, 
+              "min": 6, 
+              "default": "rhel7-template", 
+              "max": 1024, 
+              "question_description": "", 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "vm_template_name", 
+              "question_name": "Enter name of VM Template:", 
+              "type": "text"
+            }, 
+            {
+              "required": true, 
+              "min": 6, 
+              "default": "ocp.example.com", 
+              "max": 1024, 
+              "question_description": "", 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "fqdn", 
+              "question_name": "Enter your dns zone name (Example: ocp.example.com):", 
+              "type": "text"
+            }, 
+            {
+              "question_description": "", 
+              "min": 5, 
+              "default": "username", 
+              "max": 1024, 
+              "required": true, 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "rhel_username", 
+              "question_name": "Enter username for subscription-manager", 
+              "type": "text"
+            }, 
+            {
+              "question_description": "", 
+              "min": 6, 
+              "default": "changeme", 
+              "max": 32, 
+              "required": true, 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "rhel_password", 
+              "question_name": "Enter password for subscription-manager", 
+              "type": "password"
+            }, 
+            {
+              "required": true, 
+              "min": 7, 
+              "default": "0.0.0.0", 
+              "max": 1024, 
+              "question_description": "This will be the server that a records will be written to.", 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "dns_server", 
+              "question_name": "Enter DNS Server IP", 
+              "type": "text"
+            }, 
+            {
+              "question_description": "This will be used to write a records to dns server", 
+              "min": 6, 
+              "default": "changeme", 
+              "max": 32, 
+              "required": true, 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "vault_dns_key", 
+              "question_name": "Enter DNS key", 
+              "type": "password"
+            }, 
+            {
+              "question_description": "", 
+              "min": 5, 
+              "default": "exampleuser", 
+              "max": 1024, 
+              "required": true, 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "rhel_user", 
+              "question_name": "Username for ssh", 
+              "type": "text"
+            }, 
+            {
+              "question_description": "https://en.wikipedia.org/wiki/List_of_tz_database_time_zones", 
+              "min": 6, 
+              "default": "America/New_York", 
+              "max": 1024, 
+              "required": true, 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "time_zone", 
+              "question_name": "Configure System Timezone", 
+              "type": "text"
+            }, 
+            {
+              "required": true, 
+              "min": null, 
+              "default": "false", 
+              "max": null, 
+              "question_description": "This would be used for CNS", 
+              "choices": "true\nfalse", 
+              "new_question": true, 
+              "variable": "glusterstorage", 
+              "question_name": "Would you like to configure gluster?", 
+              "type": "multiplechoice"
+            }, 
+            {
+              "question_description": "BROKER SUPPORT FOR AUTHENTICATED REGISTRIES", 
+              "min": 4, 
+              "default": "username", 
+              "max": 1024, 
+              "required": true, 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "oreg_auth_user", 
+              "question_name": "Enter oreg_auth_user", 
+              "type": "text"
+            }, 
+            {
+              "question_description": "BROKER SUPPORT FOR AUTHENTICATED REGISTRIES PASSWORD", 
+              "min": 6, 
+              "default": "changeme", 
+              "max": 32, 
+              "required": true, 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "oreg_auth_password", 
+              "question_name": "ENTER oreg_auth_password", 
+              "type": "password"
+            }
+          ]
+        }
+      }, 
+      "survey_enabled": true
+    }, 
+    {
+      "name": "WF - End to End OpenShift Deployment - CNS Example", 
+      "allow_simultaneous": true, 
+      "asset_type": "workflow", 
+      "organization": "Default", 
+      "asset_relation": {
+        "labels": [], 
+        "schedules": [], 
+        "workflow_nodes": [
+          {
+            "name": "node0", 
+            "unified_job_type": "job", 
+            "success_nodes": [], 
+            "failure_nodes": [], 
+            "unified_job_name": "CONFIGURE A DNS WILDCARD", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node1", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node0", 
+              "node19"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "Deploy  Virtual Machine on VMWARE", 
+            "extra_data": {
+              "vm_cpu_count": 4, 
+              "vmware_disk_two_size": 180, 
+              "vmware_ram_mb": 16384, 
+              "vmware_new_hostname": "node1", 
+              "diskcount": 3, 
+              "vmware_disk_three_size": 200, 
+              "vmware_disk_size": 50
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node2", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node30"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "update A record for OpenShift node", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node3", 
+            "unified_job_type": "inventory_update", 
+            "success_nodes": [
+              "node29"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "vmware-datacenter-x", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node4", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node26"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "Deploy  Virtual Machine on VMWARE", 
+            "extra_data": {
+              "vm_cpu_count": 4, 
+              "vmware_disk_two_size": 180, 
+              "vmware_ram_mb": 16384, 
+              "vmware_new_hostname": "node3", 
+              "diskcount": 3, 
+              "vmware_disk_three_size": 200, 
+              "vmware_disk_size": 50
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node5", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node23"
+            ], 
+            "inventory": "master", 
+            "failure_nodes": [], 
+            "unified_job_name": "Test ssh connection OpenShift node", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node6", 
+            "unified_job_type": "job", 
+            "success_nodes": [], 
+            "failure_nodes": [], 
+            "unified_job_name": "update A record for OpenShift node", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node7", 
+            "unified_job_type": "job", 
+            "success_nodes": [], 
+            "inventory": "nodes", 
+            "failure_nodes": [], 
+            "unified_job_name": "Test ssh connection OpenShift node", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node8", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node27"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "Deploy  Virtual Machine on VMWARE", 
+            "extra_data": {
+              "vm_cpu_count": 4, 
+              "vmware_disk_two_size": 180, 
+              "vmware_ram_mb": 16384, 
+              "vmware_new_hostname": "master", 
+              "diskcount": 2, 
+              "vmware_disk_size": 50
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node9", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node18"
+            ], 
+            "inventory": "master", 
+            "failure_nodes": [], 
+            "unified_job_name": "Set the hostname of VM", 
+            "extra_data": {
+              "node_names": [
+                "master"
+              ]
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node10", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node33"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "update A record for OpenShift node", 
+            "extra_data": {
+              "vm_cpu_count": 4, 
+              "vmware_disk_two_size": 180, 
+              "vmware_folder": "/", 
+              "vmware_ram_mb": 16384, 
+              "vmware_new_hostname": "node6", 
+              "vmware_network": "VM Network", 
+              "vmware_datastore": "DefaultCluster", 
+              "vm_core_per_cpu": 1, 
+              "diskcount": 3, 
+              "vmware_datacenter": "Default-DataCenter", 
+              "vmware_disk_size": 50, 
+              "vmware_disk_three_size": 200, 
+              "vmware_template_name": "{{ vm_template_name }}", 
+              "vmware_state": "poweredon"
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node11", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node6"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "Deploy  Virtual Machine on VMWARE", 
+            "extra_data": {
+              "vm_cpu_count": 4, 
+              "vmware_disk_two_size": 180, 
+              "vmware_ram_mb": 16384, 
+              "vmware_new_hostname": "node5", 
+              "diskcount": 3, 
+              "vmware_disk_three_size": 200, 
+              "vmware_disk_size": 50
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "credential": "server-credentials", 
+            "name": "node12", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node15"
+            ], 
+            "inventory": "dnsserver", 
+            "failure_nodes": [], 
+            "unified_job_name": "OpenShift Preinstallation Checks", 
+            "extra_data": {
+              "node_names": [
+                "master", 
+                "node1", 
+                "node2", 
+                "node3", 
+                "node4"
+              ]
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node13", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node5"
+            ], 
+            "inventory": "master", 
+            "failure_nodes": [], 
+            "unified_job_name": "Restart VM", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node14", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node34"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "Pause workflow", 
+            "extra_data": {
+              "timout_val": 500
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "credential": "server-credentials", 
+            "name": "node15", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node21"
+            ], 
+            "inventory": "OSE_3.11", 
+            "failure_nodes": [], 
+            "unified_job_name": "OpenShift Preinstallation Checks", 
+            "extra_data": {
+              "node_names": [
+                "master", 
+                "node1", 
+                "node2", 
+                "node3", 
+                "node4"
+              ]
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node16", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node17"
+            ], 
+            "inventory": "nodes", 
+            "failure_nodes": [], 
+            "unified_job_name": "OpenShift worker node config", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node17", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node20"
+            ], 
+            "inventory": "nodes", 
+            "failure_nodes": [], 
+            "unified_job_name": "Configure Chrony", 
+            "extra_data": {
+              "chrony_config_server": [
+                "0.rhel.pool.ntp.org", 
+                "1.rhel.pool.ntp.org"
+              ]
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node18", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node14"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "Resize /dev/sd* hard drive", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node19", 
+            "unified_job_type": "job", 
+            "success_nodes": [], 
+            "failure_nodes": [], 
+            "unified_job_name": "update A record for OpenShift node", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node20", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node7"
+            ], 
+            "inventory": "nodes", 
+            "failure_nodes": [], 
+            "unified_job_name": "Restart VM", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node21", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node28"
+            ], 
+            "inventory": "OSE_3.11", 
+            "failure_nodes": [], 
+            "unified_job_name": "OpenShift  Prerequisites", 
+            "extra_data": {
+              "oreg_auth_user": "exampleuser"
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node22", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node13"
+            ], 
+            "inventory": "master", 
+            "failure_nodes": [], 
+            "unified_job_name": "Configure Chrony", 
+            "extra_data": {
+              "chrony_config_server": [
+                "0.rhel.pool.ntp.org", 
+                "1.rhel.pool.ntp.org"
+              ]
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node23", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node12"
+            ], 
+            "inventory": "OSE_3.11", 
+            "failure_nodes": [], 
+            "unified_job_name": "Test ssh connection OpenShift node", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node24", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node16"
+            ], 
+            "inventory": "nodes", 
+            "failure_nodes": [], 
+            "unified_job_name": "Set the hostname of VM", 
+            "extra_data": {
+              "node_names": [
+                "master", 
+                "node1", 
+                "node2", 
+                "node3", 
+                "node4"
+              ]
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node25", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node31"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "update A record for OpenShift node", 
+            "extra_data": {
+              "vault_dns_key": "{{ vault_dns_key }}", 
+              "user_data_file": "/etc/named/example.key."
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node26", 
+            "unified_job_type": "job", 
+            "success_nodes": [], 
+            "failure_nodes": [], 
+            "unified_job_name": "update A record for OpenShift node", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node27", 
+            "unified_job_type": "inventory_update", 
+            "success_nodes": [
+              "node25"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "vmware-datacenter-x", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node28", 
+            "unified_job_type": "job", 
+            "success_nodes": [], 
+            "inventory": "OSE_3.11", 
+            "failure_nodes": [], 
+            "unified_job_name": "Deploy OpenShift Cluster", 
+            "extra_data": {
+              "oreg_auth_user": "exampleuser"
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node29", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node24"
+            ], 
+            "inventory": "nodes", 
+            "failure_nodes": [], 
+            "unified_job_name": "Test ssh connection OpenShift node", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node30", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node3"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "Pause workflow", 
+            "extra_data": {
+              "timout_val": 180
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node31", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node9"
+            ], 
+            "inventory": "master", 
+            "failure_nodes": [], 
+            "unified_job_name": "Test ssh connection OpenShift node", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node32", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node2"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "Deploy  Virtual Machine on VMWARE", 
+            "extra_data": {
+              "vm_cpu_count": 4, 
+              "vmware_disk_two_size": 180, 
+              "vmware_ram_mb": 16384, 
+              "vmware_new_hostname": "node2", 
+              "diskcount": 3, 
+              "vmware_disk_three_size": 200, 
+              "vmware_disk_size": 50
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node33", 
+            "unified_job_type": "job", 
+            "success_nodes": [], 
+            "failure_nodes": [], 
+            "unified_job_name": "update A record for OpenShift node", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node34", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node22"
+            ], 
+            "inventory": "master", 
+            "failure_nodes": [], 
+            "unified_job_name": "OpenShift master node config", 
+            "always_nodes": []
+          }
+        ], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Execute", 
+            "user": []
+          }
+        ], 
+        "survey_spec": {
+          "spec": [
+            {
+              "question_description": "", 
+              "min": 6, 
+              "default": "rhel7-template", 
+              "max": 1024, 
+              "required": true, 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "vm_template_name", 
+              "question_name": "Enter name of VM Template:", 
+              "type": "text"
+            }, 
+            {
+              "question_description": "", 
+              "min": 6, 
+              "default": "ocp.example.com", 
+              "max": 1024, 
+              "required": true, 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "fqdn", 
+              "question_name": "Enter your dns zone name (Example: ocp.example.com):", 
+              "type": "text"
+            }, 
+            {
+              "required": true, 
+              "min": 5, 
+              "default": "username", 
+              "max": 1024, 
+              "question_description": "", 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "rhel_username", 
+              "question_name": "Enter username for subscription-manager", 
+              "type": "text"
+            }, 
+            {
+              "required": true, 
+              "min": 6, 
+              "default": "changeme", 
+              "max": 32, 
+              "question_description": "", 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "rhel_password", 
+              "question_name": "Enter password for subscription-manager", 
+              "type": "password"
+            }, 
+            {
+              "question_description": "This will be the server that a records will be written to.", 
+              "min": 7, 
+              "default": "0.0.0.0", 
+              "max": 1024, 
+              "required": true, 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "dns_server", 
+              "question_name": "Enter DNS Server IP", 
+              "type": "text"
+            }, 
+            {
+              "required": true, 
+              "min": 6, 
+              "default": "changeme", 
+              "max": 32, 
+              "question_description": "This will be used to write a records to dns server", 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "vault_dns_key", 
+              "question_name": "Enter DNS key", 
+              "type": "password"
+            }, 
+            {
+              "required": true, 
+              "min": 5, 
+              "default": "exampleuser", 
+              "max": 1024, 
+              "question_description": "", 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "rhel_user", 
+              "question_name": "Username for ssh", 
+              "type": "text"
+            }, 
+            {
+              "required": true, 
+              "min": 6, 
+              "default": "America/New_York", 
+              "max": 1024, 
+              "question_description": "https://en.wikipedia.org/wiki/List_of_tz_database_time_zones", 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "time_zone", 
+              "question_name": "Configure System Timezone", 
+              "type": "text"
+            }, 
+            {
+              "question_description": "This would be used for CNS", 
+              "min": null, 
+              "default": "false", 
+              "max": null, 
+              "required": true, 
+              "choices": "true\nfalse", 
+              "new_question": true, 
+              "variable": "glusterstorage", 
+              "question_name": "Would you like to configure gluster?", 
+              "type": "multiplechoice"
+            }, 
+            {
+              "required": true, 
+              "min": 4, 
+              "default": "username", 
+              "max": 1024, 
+              "question_description": "BROKER SUPPORT FOR AUTHENTICATED REGISTRIES", 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "oreg_auth_user", 
+              "question_name": "Enter oreg_auth_user", 
+              "type": "text"
+            }, 
+            {
+              "required": true, 
+              "min": 6, 
+              "default": "changeme", 
+              "max": 32, 
+              "question_description": "BROKER SUPPORT FOR AUTHENTICATED REGISTRIES PASSWORD", 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "oreg_auth_password", 
+              "question_name": "ENTER oreg_auth_password", 
+              "type": "password"
+            }
+          ], 
+          "description": "", 
+          "name": ""
+        }
+      }, 
+      "survey_enabled": true
+    }, 
+    {
+      "organization": "Default", 
+      "asset_relation": {
+        "labels": [], 
+        "schedules": [], 
+        "workflow_nodes": [
+          {
+            "name": "node0", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node1"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "Deploy  Virtual Machine on VMWARE", 
+            "extra_data": {
+              "vmware_new_hostname": "dns_server"
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node1", 
+            "unified_job_type": "inventory_update", 
+            "success_nodes": [
+              "node2"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "vmware-datacenter-x", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node2", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node3"
+            ], 
+            "inventory": "dns_server", 
+            "failure_nodes": [], 
+            "unified_job_name": "Test ssh connection OpenShift node", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node3", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node6"
+            ], 
+            "inventory": "dns_server", 
+            "failure_nodes": [], 
+            "unified_job_name": "Configure Chrony", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node4", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node5"
+            ], 
+            "inventory": "dns_server", 
+            "failure_nodes": [], 
+            "unified_job_name": "Restart VM", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node5", 
+            "unified_job_type": "job", 
+            "success_nodes": [], 
+            "inventory": "dns_server", 
+            "failure_nodes": [], 
+            "unified_job_name": "DNS port Verification", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node6", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node4"
+            ], 
+            "inventory": "dns_server", 
+            "failure_nodes": [], 
+            "unified_job_name": "Configure Bind Server", 
+            "always_nodes": []
+          }
+        ], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Execute", 
+            "user": []
+          }
+        ], 
+        "survey_spec": {
+          "spec": [
+            {
+              "question_description": "", 
+              "min": 6, 
+              "default": "rhel7-template", 
+              "max": 1024, 
+              "required": true, 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "vm_template_name", 
+              "question_name": "Enter name of VM Template:", 
+              "type": "text"
+            }, 
+            {
+              "required": true, 
+              "min": 6, 
+              "default": "username", 
+              "max": 1024, 
+              "question_description": "", 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "rhel_username", 
+              "question_name": "Enter username for subscription-manager", 
+              "type": "text"
+            }, 
+            {
+              "required": true, 
+              "min": 6, 
+              "default": "changeme", 
+              "max": 32, 
+              "question_description": "", 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "rhel_password", 
+              "question_name": "Enter password for subscription-manager", 
+              "type": "password"
+            }, 
+            {
+              "question_description": "", 
+              "min": 6, 
+              "default": "example.com", 
+              "max": 1024, 
+              "required": true, 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "fqdn", 
+              "question_name": "Enter your dns name (Example: example.com)", 
+              "type": "text"
+            }, 
+            {
+              "required": true, 
+              "min": 6, 
+              "default": "America/New_York", 
+              "max": 1024, 
+              "question_description": "https://en.wikipedia.org/wiki/List_of_tz_database_time_zones", 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "time_zone", 
+              "question_name": "Configure System Timezone", 
+              "type": "text"
+            }
+          ], 
+          "description": "", 
+          "name": ""
+        }
+      }, 
+      "asset_type": "workflow", 
+      "survey_enabled": true, 
+      "name": "WF - Deploy DNS Server"
+    }, 
+    {
+      "extra_vars": "---\nvcenter_datacenter:  vsphere.example.com\nvcenter_cluster: null", 
+      "asset_relation": {
+        "labels": [], 
+        "schedules": [], 
+        "workflow_nodes": [
+          {
+            "name": "node0", 
+            "unified_job_type": "job", 
+            "success_nodes": [], 
+            "failure_nodes": [], 
+            "unified_job_name": "Wipe vmware vm", 
+            "extra_data": {
+              "vm_name": "master"
+            }, 
+            "always_nodes": [
+              "node1"
+            ]
+          }, 
+          {
+            "name": "node1", 
+            "unified_job_type": "job", 
+            "success_nodes": [], 
+            "failure_nodes": [], 
+            "unified_job_name": "Wipe vmware vm", 
+            "extra_data": {
+              "vm_name": "node1"
+            }, 
+            "always_nodes": [
+              "node2"
+            ]
+          }, 
+          {
+            "name": "node2", 
+            "unified_job_type": "job", 
+            "success_nodes": [], 
+            "failure_nodes": [], 
+            "unified_job_name": "Wipe vmware vm", 
+            "extra_data": {
+              "vm_name": "node2"
+            }, 
+            "always_nodes": [
+              "node3"
+            ]
+          }, 
+          {
+            "name": "node3", 
+            "unified_job_type": "job", 
+            "success_nodes": [], 
+            "failure_nodes": [], 
+            "unified_job_name": "Wipe vmware vm", 
+            "extra_data": {
+              "vm_name": "node3", 
+              "vcenter_cluster": null
+            }, 
+            "always_nodes": [
+              "node5"
+            ]
+          }, 
+          {
+            "name": "node4", 
+            "unified_job_type": "inventory_update", 
+            "success_nodes": [], 
+            "failure_nodes": [], 
+            "unified_job_name": "vmware-datacenter-x", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node5", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node4"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "Wipe vmware vm", 
+            "extra_data": {
+              "vm_name": "node4", 
+              "vcenter_cluster": null
+            }, 
+            "always_nodes": []
+          }
+        ], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Execute", 
+            "user": []
+          }
+        ], 
+        "survey_spec": {}
+      }, 
+      "organization": "Default", 
+      "asset_type": "workflow", 
+      "name": "WF - Wipe OpenShift Deployment  - Minimal Example"
+    }, 
+    {
+      "description": "deploy 3 worker  vms needed for openshift", 
+      "allow_simultaneous": true, 
+      "extra_vars": "---\ndiskcount: 2\nvm_core_per_cpu: 1\nvm_cpu_count: 2\nvmware_disk_size: 50\nvmware_disk_two_size: 180\nvmware_ram_mb: 16384", 
+      "asset_relation": {
+        "labels": [], 
+        "schedules": [], 
+        "workflow_nodes": [
+          {
+            "name": "node0", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node12"
+            ], 
+            "inventory": "nodes", 
+            "failure_nodes": [], 
+            "unified_job_name": "Restart VM", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node1", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node3"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "Deploy  Virtual Machine on VMWARE", 
+            "extra_data": {
+              "vm_cpu_count": 2, 
+              "vmware_disk_two_size": 180, 
+              "vmware_ram_mb": 16384, 
+              "vmware_new_hostname": "node1", 
+              "diskcount": 2, 
+              "vmware_disk_size": 50
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node2", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node0"
+            ], 
+            "inventory": "nodes", 
+            "failure_nodes": [], 
+            "unified_job_name": "Configure Chrony", 
+            "extra_data": {
+              "chrony_config_server": [
+                "0.rhel.pool.ntp.org", 
+                "1.rhel.pool.ntp.org"
+              ]
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node3", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node7"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "update A record for OpenShift node", 
+            "extra_data": {
+              "vault_dns_key": "{{ vault_dns_key }}"
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node4", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node6"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "Deploy  Virtual Machine on VMWARE", 
+            "extra_data": {
+              "vm_cpu_count": 4, 
+              "vmware_disk_two_size": 180, 
+              "vmware_ram_mb": 16384, 
+              "vmware_new_hostname": "node3", 
+              "diskcount": 2, 
+              "vmware_disk_size": 50
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node5", 
+            "unified_job_type": "job", 
+            "success_nodes": [], 
+            "failure_nodes": [], 
+            "unified_job_name": "update A record for OpenShift node", 
+            "extra_data": {
+              "vault_dns_key": "{{ vault_dns_key }}"
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node6", 
+            "unified_job_type": "job", 
+            "success_nodes": [], 
+            "failure_nodes": [], 
+            "unified_job_name": "update A record for OpenShift node", 
+            "extra_data": {
+              "vault_dns_key": "{{ vault_dns_key }}"
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node7", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node10"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "Pause workflow", 
+            "extra_data": {
+              "timout_val": 180
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node8", 
+            "unified_job_type": "job", 
+            "success_nodes": [], 
+            "failure_nodes": [], 
+            "unified_job_name": "update A record for OpenShift node", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node9", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node2"
+            ], 
+            "inventory": "nodes", 
+            "failure_nodes": [], 
+            "unified_job_name": "OpenShift worker node config", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node10", 
+            "unified_job_type": "inventory_update", 
+            "success_nodes": [
+              "node15"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "vmware-datacenter-x", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node11", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node5"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "Deploy  Virtual Machine on VMWARE", 
+            "extra_data": {
+              "vm_cpu_count": 2, 
+              "vmware_disk_two_size": 180, 
+              "vmware_ram_mb": 16384, 
+              "vmware_new_hostname": "node2", 
+              "diskcount": 2, 
+              "vmware_disk_size": 50
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node12", 
+            "unified_job_type": "job", 
+            "success_nodes": [], 
+            "inventory": "nodes", 
+            "failure_nodes": [], 
+            "unified_job_name": "Test ssh connection OpenShift node", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node13", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node9"
+            ], 
+            "inventory": "nodes", 
+            "failure_nodes": [], 
+            "unified_job_name": "Set the hostname of VM", 
+            "extra_data": {
+              "node_names": [
+                "master", 
+                "node1", 
+                "node2", 
+                "node3", 
+                "node4"
+              ]
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node14", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node8"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "Deploy  Virtual Machine on VMWARE", 
+            "extra_data": {
+              "vm_cpu_count": 4, 
+              "vmware_disk_two_size": 180, 
+              "vmware_ram_mb": 16384, 
+              "vmware_new_hostname": "node3", 
+              "diskcount": 2, 
+              "vmware_disk_size": 50
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node15", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node13"
+            ], 
+            "inventory": "nodes", 
+            "failure_nodes": [], 
+            "unified_job_name": "Test ssh connection OpenShift node", 
+            "always_nodes": []
+          }
+        ], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Execute", 
+            "user": []
+          }
+        ], 
+        "survey_spec": {
+          "description": "", 
+          "name": "", 
+          "spec": [
+            {
+              "question_description": "", 
+              "min": 6, 
+              "default": "rhel7-template", 
+              "max": 1024, 
+              "required": true, 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "vm_template_name", 
+              "question_name": "Enter name of VM Template:", 
+              "type": "text"
+            }, 
+            {
+              "required": true, 
+              "min": 6, 
+              "default": "ocp.example.com", 
+              "max": 1024, 
+              "question_description": "", 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "fqdn", 
+              "question_name": "Enter your dns zone name (Example: ocp.example.com):", 
+              "type": "text"
+            }, 
+            {
+              "required": true, 
+              "min": 5, 
+              "default": "username", 
+              "max": 1024, 
+              "question_description": "", 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "rhel_username", 
+              "question_name": "Enter username for subscription-manager", 
+              "type": "text"
+            }, 
+            {
+              "required": true, 
+              "min": 6, 
+              "default": "changeme", 
+              "max": 32, 
+              "question_description": "", 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "rhel_password", 
+              "question_name": "Enter password for subscription-manager", 
+              "type": "password"
+            }, 
+            {
+              "question_description": "", 
+              "min": 4, 
+              "default": "exampleuser", 
+              "max": 1024, 
+              "required": true, 
+              "choices": "", 
+              "variable": "rhel_user", 
+              "question_name": "Username for ssh", 
+              "type": "text"
+            }, 
+            {
+              "required": true, 
+              "min": null, 
+              "default": "false", 
+              "max": null, 
+              "question_description": "This would be used for CNS", 
+              "choices": "true\nfalse", 
+              "new_question": true, 
+              "variable": "glusterstorage", 
+              "question_name": "Would you like to configure glusterfs?", 
+              "type": "multiplechoice"
+            }, 
+            {
+              "required": true, 
+              "min": 7, 
+              "default": "0.0.0.0", 
+              "max": 1024, 
+              "question_description": "This will be the server that a records will be written to.", 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "dns_server", 
+              "question_name": "Enter DNS Server IP", 
+              "type": "text"
+            }, 
+            {
+              "required": true, 
+              "min": 6, 
+              "default": "America/New_York", 
+              "max": 1024, 
+              "question_description": "https://en.wikipedia.org/wiki/List_of_tz_database_time_zones", 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "time_zone", 
+              "question_name": "Configure System Timezone", 
+              "type": "text"
+            }, 
+            {
+              "required": true, 
+              "min": 6, 
+              "default": "changeme", 
+              "max": 32, 
+              "question_description": "This will be used to write a records to dns server", 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "vault_dns_key", 
+              "question_name": "Enter DNS server key", 
+              "type": "password"
+            }
+          ]
+        }
+      }, 
+      "organization": "Default", 
+      "asset_type": "workflow", 
+      "survey_enabled": true, 
+      "name": "WF - Deploy OpenShift Worker Nodes"
+    }, 
+    {
+      "description": "Deploy Master Node VM needed for OpenShift", 
+      "extra_vars": "---\ndiskcount: 2\nvm_core_per_cpu: 1\nvm_cpu_count: 4\nvmware_disk_size: 50\nvmware_disk_two_size: 180\nvmware_ram_mb: 16384", 
+      "asset_relation": {
+        "labels": [], 
+        "schedules": [], 
+        "workflow_nodes": [
+          {
+            "name": "node0", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node3"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "Deploy  Virtual Machine on VMWARE", 
+            "extra_data": {
+              "diskcount": 2
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node1", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node4"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "Resize /dev/sd* hard drive", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node2", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node1"
+            ], 
+            "inventory": "master", 
+            "failure_nodes": [], 
+            "unified_job_name": "Test ssh connection OpenShift node", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node3", 
+            "unified_job_type": "inventory_update", 
+            "success_nodes": [
+              "node5"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "vmware-datacenter-x", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node4", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node7"
+            ], 
+            "inventory": "master", 
+            "failure_nodes": [], 
+            "unified_job_name": "OpenShift master node config", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node5", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node2"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "update A record for OpenShift node", 
+            "extra_data": {
+              "vault_dns_key": "{{ vault_dns_key }}", 
+              "user_data_file": "/etc/named/example.key."
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node6", 
+            "unified_job_type": "job", 
+            "success_nodes": [], 
+            "inventory": "master", 
+            "failure_nodes": [], 
+            "unified_job_name": "Test ssh connection OpenShift node", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node7", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node8"
+            ], 
+            "inventory": "master", 
+            "failure_nodes": [], 
+            "unified_job_name": "Set the hostname of VM", 
+            "extra_data": {
+              "node_names": [
+                "master"
+              ]
+            }, 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node8", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node6"
+            ], 
+            "inventory": "master", 
+            "failure_nodes": [], 
+            "unified_job_name": "Restart VM", 
+            "always_nodes": []
+          }
+        ], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Execute", 
+            "user": []
+          }
+        ], 
+        "survey_spec": {
+          "spec": [
+            {
+              "question_description": "", 
+              "min": 6, 
+              "default": "rhel7-template", 
+              "max": 1024, 
+              "required": true, 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "vm_template_name", 
+              "question_name": "Enter name of VM Template:", 
+              "type": "text"
+            }, 
+            {
+              "required": true, 
+              "min": 6, 
+              "default": "master", 
+              "max": 1024, 
+              "question_description": "", 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "server_name", 
+              "question_name": "Please enter server name", 
+              "type": "text"
+            }, 
+            {
+              "question_description": "", 
+              "min": 6, 
+              "default": "ocp.example.com", 
+              "max": 1024, 
+              "required": true, 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "fqdn", 
+              "question_name": "Enter your dns zone name (Example: ocp.example.com):", 
+              "type": "text"
+            }, 
+            {
+              "question_description": "", 
+              "min": 5, 
+              "default": "username", 
+              "max": 1024, 
+              "required": true, 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "rhel_username", 
+              "question_name": "Enter username for subscription-manager", 
+              "type": "text"
+            }, 
+            {
+              "required": true, 
+              "min": 6, 
+              "default": "changeme", 
+              "max": 32, 
+              "question_description": "", 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "rhel_password", 
+              "question_name": "Enter password for subscription-manager", 
+              "type": "password"
+            }, 
+            {
+              "required": true, 
+              "min": 4, 
+              "default": "exampleuser", 
+              "max": 1024, 
+              "question_description": "", 
+              "choices": "", 
+              "variable": "rhel_user", 
+              "question_name": "Username for ssh", 
+              "type": "text"
+            }, 
+            {
+              "required": true, 
+              "min": null, 
+              "default": "false", 
+              "max": null, 
+              "question_description": "This would be used for CNS", 
+              "choices": "true\nfalse", 
+              "new_question": true, 
+              "variable": "glusterstorage", 
+              "question_name": "Would you like to configure gluster?", 
+              "type": "multiplechoice"
+            }, 
+            {
+              "required": true, 
+              "min": 7, 
+              "default": "0.0.0.0", 
+              "max": 1024, 
+              "question_description": "This will be the server that a records will be written to.", 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "dns_server", 
+              "question_name": "Enter DNS Server IP", 
+              "type": "text"
+            }, 
+            {
+              "required": true, 
+              "min": 6, 
+              "default": "America/New_York", 
+              "max": 1024, 
+              "question_description": "https://en.wikipedia.org/wiki/List_of_tz_database_time_zones", 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "time_zone", 
+              "question_name": "Configure System Timezone", 
+              "type": "text"
+            }, 
+            {
+              "required": true, 
+              "min": 6, 
+              "default": "changeme", 
+              "max": 32, 
+              "question_description": "This will be used to write a records to dns server", 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "vault_dns_key", 
+              "question_name": "Enter DNS key", 
+              "type": "password"
+            }
+          ], 
+          "description": "", 
+          "name": ""
+        }
+      }, 
+      "organization": "Default", 
+      "asset_type": "workflow", 
+      "survey_enabled": true, 
+      "name": "WF - Deploy OpenShift Master Node"
+    }, 
+    {
+      "description": "Ansible Tower will run on this machine", 
+      "extra_vars": "---\ndiskcount: 1\nvm_core_per_cpu: 1\nvm_cpu_count: 2\nvmware_disk_size: 30\nvmware_disk_two_size: 0\nvmware_ram_mb: 4096", 
+      "asset_relation": {
+        "labels": [], 
+        "schedules": [], 
+        "workflow_nodes": [
+          {
+            "name": "node0", 
+            "unified_job_type": "inventory_update", 
+            "success_nodes": [
+              "node2"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "vmware-datacenter-x", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node1", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node0"
+            ], 
+            "failure_nodes": [], 
+            "unified_job_name": "Deploy  Virtual Machine on VMWARE", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node2", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node3"
+            ], 
+            "inventory": "jumpbox", 
+            "failure_nodes": [], 
+            "unified_job_name": "OpenShift jumpbox 3.11 deployer", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node3", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node5"
+            ], 
+            "inventory": "jumpbox", 
+            "failure_nodes": [], 
+            "unified_job_name": "Deploy Ansible Tower", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node4", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node6"
+            ], 
+            "inventory": "jumpbox", 
+            "failure_nodes": [], 
+            "unified_job_name": "Restart VM", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node5", 
+            "unified_job_type": "job", 
+            "success_nodes": [
+              "node4"
+            ], 
+            "inventory": "jumpbox", 
+            "failure_nodes": [], 
+            "unified_job_name": "Configure Chrony", 
+            "always_nodes": []
+          }, 
+          {
+            "name": "node6", 
+            "unified_job_type": "job", 
+            "success_nodes": [], 
+            "inventory": "jumpbox", 
+            "failure_nodes": [], 
+            "unified_job_name": "Test jumpbox for Ansible tower connection", 
+            "always_nodes": []
+          }
+        ], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Execute", 
+            "user": []
+          }
+        ], 
+        "survey_spec": {
+          "spec": [
+            {
+              "question_description": "", 
+              "min": 6, 
+              "default": "rhel7-template", 
+              "max": 1024, 
+              "required": true, 
+              "choices": "", 
+              "variable": "vm_template_name", 
+              "question_name": "Enter name of VM Template:", 
+              "type": "text"
+            }, 
+            {
+              "required": true, 
+              "min": 6, 
+              "default": "jumpbox_server", 
+              "max": 1024, 
+              "question_description": "", 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "server_name", 
+              "question_name": "Please enter server name", 
+              "type": "text"
+            }, 
+            {
+              "required": true, 
+              "min": 6, 
+              "default": "ocp.example.com", 
+              "max": 1024, 
+              "question_description": "", 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "fqdn", 
+              "question_name": "Enter your dns zone name (Example: ocp.example.com):", 
+              "type": "text"
+            }, 
+            {
+              "required": true, 
+              "min": 7, 
+              "default": "0.0.0.0", 
+              "max": 1024, 
+              "question_description": "", 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "dns_server_ip", 
+              "question_name": "Enter DNS Server ip", 
+              "type": "text"
+            }, 
+            {
+              "question_description": "", 
+              "min": 6, 
+              "default": "username", 
+              "max": 1024, 
+              "required": true, 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "rhel_username", 
+              "question_name": "Enter username for subscription-manager", 
+              "type": "text"
+            }, 
+            {
+              "question_description": "", 
+              "min": 6, 
+              "default": "changeme", 
+              "max": 32, 
+              "required": true, 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "rhel_password", 
+              "question_name": "Enter password for subscription-manager", 
+              "type": "password"
+            }, 
+            {
+              "required": true, 
+              "min": 4, 
+              "default": "exampleuser", 
+              "max": 1024, 
+              "question_description": "", 
+              "choices": "", 
+              "variable": "rhel_user", 
+              "question_name": "Username for ssh", 
+              "type": "text"
+            }, 
+            {
+              "required": true, 
+              "min": 6, 
+              "default": "America/New_York", 
+              "max": 1024, 
+              "question_description": "https://en.wikipedia.org/wiki/List_of_tz_database_time_zones", 
+              "choices": "", 
+              "new_question": true, 
+              "variable": "time_zone", 
+              "question_name": "Configure System Timezone", 
+              "type": "text"
+            }
+          ], 
+          "description": "", 
+          "name": ""
+        }
+      }, 
+      "organization": "Default", 
+      "asset_type": "workflow", 
+      "survey_enabled": true, 
+      "name": "WF - Deploy OpenShift Jumpbox"
+    }, 
+    {
+      "credential": "gitlab-credentials", 
+      "asset_relation": {
+        "notification_templates_error": [], 
+        "notification_templates_success": [], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Use", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Update", 
+            "user": []
+          }
+        ], 
+        "schedules": []
+      }, 
+      "scm_branch": "master", 
+      "name": "openshift-ansible-tower", 
+      "scm_clean": true, 
+      "scm_url": "https://gitlab.consulting.redhat.com/rto/openshift-ansible-tower.git", 
+      "scm_delete_on_update": true, 
+      "scm_type": "git", 
+      "organization": "Default", 
+      "asset_type": "project"
+    }, 
+    {
+      "scm_branch": "release-3.11", 
+      "name": "ansible-openshift", 
+      "scm_url": "https://github.com/openshift/openshift-ansible", 
+      "asset_relation": {
+        "notification_templates_error": [], 
+        "notification_templates_success": [], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Use", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Update", 
+            "user": []
+          }
+        ], 
+        "schedules": []
+      }, 
+      "scm_type": "git", 
+      "organization": "Default", 
+      "asset_type": "project"
+    }, 
+    {
+      "asset_relation": {
+        "roles": [
+          {
+            "team": [], 
+            "name": "Credential Admin", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Member", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Execute", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Notification Admin", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Workflow Admin", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Job Template Admin", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Project Admin", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Auditor", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Inventory Admin", 
+            "user": []
+          }
+        ]
+      }, 
+      "asset_type": "organization", 
+      "name": "Default"
+    }, 
+    {
+      "description": "Please change me to target DNS server", 
+      "variables": "---", 
+      "asset_type": "inventory", 
+      "organization": "Default", 
+      "asset_relation": {
+        "inventory_source": [], 
+        "host": [
+          {
+            "name": "0.0.0.0"
+          }
+        ], 
+        "group": [], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Ad Hoc", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Use", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Update", 
+            "user": []
+          }
+        ]
+      }, 
+      "name": "dnsserver"
+    }, 
+    {
+      "host_filter": "search=dns_server", 
+      "kind": "smart", 
+      "name": "dns_server", 
+      "asset_type": "inventory", 
+      "organization": "Default", 
+      "asset_relation": {
+        "inventory_source": [], 
+        "host": [], 
+        "group": [], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Ad Hoc", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Use", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Update", 
+            "user": []
+          }
+        ]
+      }
+    }, 
+    {
+      "host_filter": "search=jumpbox", 
+      "kind": "smart", 
+      "name": "jumpbox", 
+      "asset_type": "inventory", 
+      "organization": "Default", 
+      "asset_relation": {
+        "inventory_source": [], 
+        "host": [], 
+        "group": [], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Ad Hoc", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Use", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Update", 
+            "user": []
+          }
+        ]
+      }
+    }, 
+    {
+      "organization": "Default", 
+      "variables": "---", 
+      "asset_relation": {
+        "inventory_source": [], 
+        "host": [
+          {
+            "variables": "---\nansible_connection: local", 
+            "name": "localhost"
+          }
+        ], 
+        "group": [], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Ad Hoc", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Use", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Update", 
+            "user": []
+          }
+        ]
+      }, 
+      "asset_type": "inventory", 
+      "name": "localhost-inventory"
+    }, 
+    {
+      "host_filter": "search=master_", 
+      "kind": "smart", 
+      "name": "master", 
+      "asset_type": "inventory", 
+      "organization": "Default", 
+      "asset_relation": {
+        "inventory_source": [], 
+        "host": [], 
+        "group": [], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Ad Hoc", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Use", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Update", 
+            "user": []
+          }
+        ]
+      }
+    }, 
+    {
+      "host_filter": "name__icontains=_ and search=node", 
+      "kind": "smart", 
+      "name": "nodes", 
+      "asset_type": "inventory", 
+      "organization": "Default", 
+      "asset_relation": {
+        "inventory_source": [], 
+        "host": [], 
+        "group": [], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Ad Hoc", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Use", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Update", 
+            "user": []
+          }
+        ]
+      }
+    }, 
+    {
+      "organization": "Default", 
+      "variables": "---", 
+      "asset_relation": {
+        "inventory_source": [], 
+        "host": [], 
+        "group": [], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Ad Hoc", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Use", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Update", 
+            "user": []
+          }
+        ]
+      }, 
+      "asset_type": "inventory", 
+      "name": "OSE_3.11"
+    }, 
+    {
+      "organization": "Default", 
+      "variables": "---", 
+      "asset_relation": {
+        "inventory_source": [
+          {
+            "credential": "vmware-credentials", 
+            "name": "vmware-datacenter-x", 
+            "source": "vmware", 
+            "schedules": [], 
+            "overwrite": true
+          }
+        ], 
+        "host": [], 
+        "group": [], 
+        "roles": [
+          {
+            "team": [], 
+            "name": "Ad Hoc", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Admin", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Read", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Use", 
+            "user": []
+          }, 
+          {
+            "team": [], 
+            "name": "Update", 
+            "user": []
+          }
+        ]
+      }, 
+      "asset_type": "inventory", 
+      "name": "vmware-inventory"
+    }
+  ]
+  

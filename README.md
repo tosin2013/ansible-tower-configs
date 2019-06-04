@@ -38,7 +38,7 @@ default template rhel75-vmw-tpl
 
 * run configure-infra-jobs.sh based off infrastructure
   - refer to scripts/configure-vmware-jobs.sh
-  - tower-cli send towerconfigs/ansible-tower-configuration-v0.0.7.json
+  - tower-cli send towerconfigs/ansible-tower-configuration-v0.0.8.json
 * confirm there are no errors in configuration push
 *  mkdir /root/ose3.11
 * touch /root/ose3.11/ansible-hosts
