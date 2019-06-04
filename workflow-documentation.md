@@ -1,0 +1,47 @@
+# This will define the sets used to get a successful OpenShift deployment.
+
+## Pre Defined workflows
+These are the following workflow steps in my lab running vmware. You may have to edit the workflow steps or the playbooks in your own environment.  
+
+**Before starting the work flows make sure the credentials are configured in your tower instance. Any successfully synced with your target inventory.**
+### Manual deployment 
+* WF - Deploy DNS Server
+* Configure DNS server for OpenShift <-> Against dnsserver 
+* WF - Deploy OpenShift Jumpbox
+* Configure Tower For OpenShift Deployments <-> Against Tower 
+* login to deployed Openshift jumpbox 
+* update all credentials on ansible tower. 
+* You may have to rerun the Configure Tower For OpenShift Deployments to correctly configure the environment. 
+* Test the vmware environment
+* WF - Deploy OpenShift Master Node
+* WF - Deploy OpenShift Worker Nodes
+* CONFIGURE A DNS WILDCARD
+* OpenShift Preinstallation Checks <-> Against dnsserver 
+* OpenShift Preinstallation Checks <-> Against master node and workers
+* OpenShift Prerequisites <-> Openshift inventory example: OSE_3.11
+* Deploy OpenShift Cluster
+
+### End to end Deployment 
+* WF - Deploy DNS Server
+* Configure DNS server for OpenShift <-> Against dnsserver 
+* WF - Deploy OpenShift Jumpbox
+* Configure Tower For OpenShift Deployments <-> Against Tower 
+* login to deployed Openshift jumpbox 
+* update all credentials on ansible tower. 
+* You may have to rerun the Configure Tower For OpenShift Deployments to correctly configure the environment. 
+* Test the vmware environment
+* WF - End to End OpenShift Deployment - Minimal Example or WF - End to End OpenShift Deployment - CNS Example 
+* 
+
+## Testing before Deployment 
+* Deploy  Virtual Machine on VMWARE
+* Wipe vmware vm
+
+### uninstall OpenShift 
+* OpenShift Uninstall
+
+### Clean up Deployment remove vms
+* WF - Wipe OpenShift Deployment - Minimal Example or WF - Wipe OpenShift Deployment - CNS Example 
+
+### manually wipe VM
+* Wipe vmware vm

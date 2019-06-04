@@ -58,17 +58,13 @@ tower-manage inventory_import --source=/root/environments/${AWXDIRECTORYNAME} --
 * Edit  workflow and jobs templates where needed
 
 
-## OpenShift Deployment Steps on VMWARE WIP
-1. Configure your dns server workflow then run Deploy DNS Server
-  - WF - Deploy DNS Server
-* Deploy jumpbox to target vmware environment
-* Configure jumpbox on target vmware environment and start deployment
-
-
+## OpenShift Deployment Steps on VMWARE
+* Use the following document below to get your openshift cluster configured. 
+[workflow-documentation.md](workflow-documentation.md)
 
 # Testing
 Test the Deploy Virtual Machine on VMWARE Job Template
-TEst the Wipe vmware vm Job Template
+Test the Wipe vmware vm Job Template
 
 # Notes and Recommendations
 * Create backups of your server once  deployment has completed successfully
