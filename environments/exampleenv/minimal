@@ -1,0 +1,39 @@
+[OSEv3:children]
+masters
+nodes
+etcd
+
+[etcd]
+master.ocp.example.com openshift_public_hostname=master.ocp.example.com
+
+[masters]
+master.ocp.example.com openshift_public_hostname=master.ocp.example.com
+
+[nodes]
+master.ocp.example.com openshift_public_hostname=master.ocp.example.com openshift_node_group_name='node-config-master'
+node1.ocp.example.com openshift_public_hostname=node1.ocp.example.com openshift_node_group_name='node-config-infra'
+node2.ocp.example.com openshift_public_hostname=node2.ocp.example.com openshift_node_group_name='node-config-infra'
+node3.ocp.example.com openshift_public_hostname=node3.ocp.example.com openshift_node_group_name='node-config-compute'
+node4.ocp.example.com openshift_public_hostname=node4.ocp.example.com openshift_node_group_name='node-config-compute'
+
+[local]
+localhost ansible_become=false ansible_user=tosin  #or ansible_user=awx
+
+[OSEv3:vars]
+ansible_ssh_user=tosin
+ansible_become=true
+debug_level=2
+openshift_release=v3.11
+openshift_deployment_type=openshift-enterprise
+
+oreg_url=registry.redhat.io/openshift3/ose-${component}:${version}
+
+openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider'}]
+openshift_master_default_subdomain=apps.ocp.example.com
+openshift_master_htpasswd_users={'example': 'changeme'}
+
+openshift_disable_check="disk_availability,memory_availability"
+
+openshift_clock_enabled=true
+
+os_firewall_use_firewalld=True
