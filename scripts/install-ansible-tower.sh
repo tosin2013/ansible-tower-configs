@@ -11,9 +11,14 @@ subscription-manager attach --pool=$POOL_ID
 #subscription-manager attach --auto
 sudo subscription-manager repos --enable  rhel-7-server-ansible-2.6-rpms
 sudo subscription-manager repos --enable rhel-server-rhscl-7-rpms
+sudo subscription-manager repos \
+   --enable="rhel-7-server-rpms" \
+   --enable="rhel-7-server-extras-rpms" \
+   --enable="rhel-7-server-ose-3.11-rpms"
 
 sudo yum install ansible -y
 sudo yum install python27-python-pip -y
+sudo yum install openshift-ansible -y
 sudo scl enable python27 bash
 
 # https://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-latest.tar.gz
@@ -31,17 +36,17 @@ localhost ansible_connection=local
 [database]
 
 [all:vars]
-admin_password='$(openssl rand -base64 15)'
+admin_password='$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 15 | head -n 1)'
 
 pg_host=''
 pg_port=''
 
 pg_database='awx'
 pg_username='awx'
-pg_password='$(openssl rand -base64 15)'
+pg_password='$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 15 | head -n 1)'
 
 rabbitmq_username=tower
-rabbitmq_password='$(openssl rand -base64 15)'
+rabbitmq_password='$(openssl rand -hex 8)'
 rabbitmq_cookie=cookiemonster
 
 # Isolated Tower nodes automatically generate an RSA key for authentication;
