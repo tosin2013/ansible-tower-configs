@@ -6,13 +6,12 @@ Collection of configuration files and scripts for an Ansible tower OpenShift dep
 * Create rhel 7.6 VM Templates on vmware
 
 ## Quick Start
-* start up VM
+* start up RHEL 7.6 VM
 * run or follow steps in scripts/install-ansible-tower.sh
   - installs ansible tower
   - installs tower CLI
 * Login to ansible tower
-* TEMP STEP:  while openshift-ansible-tower is in private repo
-  - Add openshift-ansible-tower project to Ansible Tower and refresh the project
+  - the username and password are auto-generated under the inventory file
 
 ```
 1. Create credential for git repo
