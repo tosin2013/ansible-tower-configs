@@ -31,7 +31,7 @@ Collection of configuration files and scripts for an Ansible tower Mutli-Site Op
 ## Documentation
 **OpenShift Deployment Steps on VMWARE**  
 Use the following document below to get your OpenShift cluster configured.  
-[Workflow Documentation](docs/workflow-documentation.md)  
+[Workflow Documentation](docs/workflow-documentation.adoc)
 
 **Add Multiple Sites to inventory**  
 Import OpenShift inventory in to ansible tower  
