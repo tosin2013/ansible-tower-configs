@@ -1,0 +1,19 @@
+== Instructions  on importing OpenShift inventory into tower 
+
+=== Use default minimal inventory example
+Run OpenShift inventory import script
+```
+./openshift-inventory-import.sh environments/minimal/inventory site001-inventory
+```
+
+=== Using OpenShift inventory
+1. ssh  to ansible tower instance.
+2. cd ansible-tower-configs/enviornments
+3. Create an environment under the environments folder.
+4. mkdir devenv
+5. touch devenv/inventory
+6. populate devenv/inventory
+7. Run OpenShift inventory import script
+```
+./openshift-inventory-import.sh environments/devenv/inventory site002-inventory
+```

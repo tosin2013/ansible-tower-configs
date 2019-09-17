@@ -1,6 +1,7 @@
 #/bin/bash
 
-sudo scl enable python27 bash
+#sudo scl enable python27 bash
+
 tower-cli config verify_ssl false
 
 #login to ansible tower via cli
@@ -11,7 +12,4 @@ ln -s /usr/share/ansible/openshift-ansible /var/lib/awx/projects/
 
 # Notes
 # https://github.com/ansible/tower-cli/issues/581
-tower-cli send towerconfigs/ansible-tower-configuration-v0.0.8.json
-
-mkdir /root/ose3.11
-touch /root/ose3.11/ansible-hosts
+tower-cli send ../towerconfigs/ansible-tower-configuration-v0.0.9.json

@@ -1,65 +1,41 @@
-# ansible-tower-configs - WIP
+# Ansibler Tower Configs
 
-Collection of configuration files and scripts for an Ansible tower OpenShift deployment.
+Collection of configuration files and scripts for an Ansible tower Mutli-Site OpenShift deployment. Used with the [openshift-ansible-tower](https://github.com/tosin2013/openshift-ansible-tower) repo. 
 
-## Prerequisites for VMWARE
-* Create rhel 7.6 VM Templates on vmware
+## Prerequisites 
+* Ansible tower License
+
+## Prerequisites if using VMWARE
+* Create RHEL 7.6 VM Templates on vmware
 
 ## Quick Start
-* start up RHEL 7.6 VM
+* start up RHEL 7.6 VM template 
+* run scripts/package-config-ansible.sh
+  - Configures packages needed to run thee install-ansible-tower script
 * run or follow steps in scripts/install-ansible-tower.sh
   - installs ansible tower
   - installs tower CLI
 * Login to ansible tower
   - the username and password are auto-generated under the inventory file
 
+## Auto License 
+* Copy your ansible license to tower 
+* edit the tower file as seen below add eula_accepted to license file
 ```
-1. Create credential for git repo
-name:  gitlab-credentials
-CREDENTIAL TYPE: Source Control
-USERNAME: yourusername
-PASSWORD: yourpassword
-2. Create Project
-NAME: openshift-ansible-tower
-SCM TYPE: Git
-Source Details: https://gitlab.consulting.redhat.com/rto/openshift-ansible-tower.git
-SCM/BRANCH/TAG/COMMIT: master
-SCM CREDENTIAL:  gitlab-credentials
-SCM UPDATE OPTIONS: CLEAN and DELETE ON UPDATE
-# Save and refresh project
+{
+    "eula_accepted": "true", <- add above line below
+    "company_name": "Red Hat",
 ```
-* ssh onto ansible server and  git clone ansible-tower-configs
-```
-git clone https://gitlab.consulting.redhat.com/rto/ansible-tower-configs.git
-```
-### Notes
-default template rhel75-vmw-tpl
+* run the register-ansible-tower.sh script
 
-* run configure-infra-jobs.sh based off infrastructure
-  - refer to scripts/configure-vmware-jobs.sh
-  - tower-cli send towerconfigs/ansible-tower-configuration-v0.0.8.json
-* confirm there are no errors in configuration push
-*  mkdir /root/ose3.11
-* touch /root/ose3.11/ansible-hosts
-* update /root/ose3.11/ansible-hosts with ansible inventory file
-* Run update script to update ansible tower
+## Documentation
+**OpenShift Deployment Steps on VMWARE**  
+Use the following document below to get your OpenShift cluster configured.  
+[Workflow Documentation](docs/workflow-documentation.md)  
 
-```
-#/bin/bash
-AWXDIRECTORYNAME="exampleenv/cnsinventory"
-AWXINVENTORYNAME="OSE_3.11"
-
-tower-manage inventory_import --source=/root/environments/${AWXDIRECTORYNAME} --inventory-name="$AWXINVENTORYNAME" --overwrite --overwrite-vars
-```
-* Update All credentials on ansible tower
-* Sync vmware-inventory source file vmware-datacenter-x
-* Configure your cluster with custom env variables
-* Edit  workflow and jobs templates where needed
-
-
-## OpenShift Deployment Steps on VMWARE
-* Use the following document below to get your openshift cluster configured. 
-[workflow-documentation.md](workflow-documentation.md)
+**Add Multiple Sites to inventory**  
+Import OpenShift inventory in to ansible tower  
+[Import Openshift Inventory](docs/import-openshift-inventory.adoc)
 
 # Testing
 Test the Deploy Virtual Machine on VMWARE Job Template
