@@ -1,0 +1,92 @@
+= Tower Configuration  
+
+The following document defines how to configure your ansible tower to run OpenShift Deployment Workflows
+
+* import ansible license or manually configure license
+```
+# Example
+.scripts/register-ansible-tower.sh admin password 192.168.1.20
+```
+
+*Note: A license must be added to tower before performing the steps below.*
+
+Tower configuration steps
+
+* Configure jobs and workflows 
+```
+.scripts/register-ansible-tower.sh configure-vmware-jobs.sh
+```
+
+* Configure vmware-credentails
+** Resources -> CREDENTIALS 
+** Click on vmware-credentials
+** Update the following 
+***  VCENTER HOST
+*** USERNAME
+*** PASSWORD
+** Save Settings 
+
+* Configure server-credentials
+** Resources -> CREDENTIALS 
+** Click on server-credentials
+** Update the following 
+*** USERNAME
+*** PASSWORD
+** Save Settings 
+* For sudo access 
+** Change `PRIVILEGE ESCALATION METHOD` to sudo
+** Change `PRIVILEGE ESCALATION USERNAME` to desired username
+** Change `PRIVILEGE ESCALATION PASSWORD` 
+
+* Test Inventory Sync
+** Click on INVENTORIES -> vmware-inventory -> Sources 
+** Click on `Start sync process` next to default 	`vmware-datacenter-x` source.
+
+* Test Jobs 
+** Test the `Deploy Virtual Machine on VMWARE` Job Template 
+```
+#edit  yaml below for prompt
+---
+vm_cpu_count: 1
+vmware_folder: /
+vmware_ram_mb: 2048
+vmware_new_hostname: test
+vmware_network: yournetwork
+vmware_datastore: yourdatastore
+vm_core_per_cpu: 1
+diskcount: 1
+vmware_datacenter: your-datacenter
+vmware_disk_size: 20
+vmware_template_name: your-vmtemplate
+vmware_state: poweredon
+
+```
+** Test the `Wipe vmware vm` Job Template
+```
+#Edit yaml below for your prompt
+---
+vm_name: test
+vcenter_cluster: null
+vcenter_datacenter: vsphere.example.com
+
+```
+
+Update `Deploy Virtual Machine on VMWARE`  default extra variables
+
+* Templates -> `Deploy Virtual Machine on VMWARE`
+* Edit Extra Varibles 
+```
+diskcount: 1
+vm_core_per_cpu: 1
+vm_cpu_count: 1
+vmware_datacenter: Default-DataCenter <- Change to your datacenter 
+vmware_datastore: DefaultCluster <- change to your cluster
+vmware_disk_size: 20
+vmware_folder: /
+vmware_network: VM Network
+vmware_new_hostname: '{{ server_name }}'
+vmware_ram_mb: 2048
+vmware_state: poweredon
+vmware_template_name: '{{ vm_template_name }}'
+
+```

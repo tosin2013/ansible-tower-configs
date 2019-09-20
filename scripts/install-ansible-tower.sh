@@ -32,5 +32,6 @@ rabbitmq_cookie=cookiemonster
 EOF
 
 pip install ansible-tower-cli
+pip install dnspython
 
 ./setup.sh

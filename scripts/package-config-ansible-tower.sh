@@ -6,9 +6,11 @@ if [[ -z $1 ]]; then
 fi
 POOL_ID=$1
 
-subscription-manager register
-subscription-manager attach --pool=$POOL_ID
+sudo subscription-manager register
+sudo subscription-manager attach --pool=$POOL_ID
 #subscription-manager attach --auto
+
+sudo subscription-manager repos --disable="*" 
 sudo subscription-manager repos --enable  rhel-7-server-ansible-2.6-rpms
 sudo subscription-manager repos --enable rhel-server-rhscl-7-rpms
 sudo subscription-manager repos \

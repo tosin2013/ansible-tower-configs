@@ -22,6 +22,10 @@ if [[ ! -f ${FULLPATHTOINV} ]]; then
   echo "Unable to locate ${FULLPATHTOINV}"
   exit 1
 fi
+tower-cli config verify_ssl false
+
+#login to ansible tower via cli
+tower-cli login admin
 
 tower-cli inventory  create -n  ${AWXINVENTORYNAME} --organization ${ORGANIZATION} || exit $?
 tower-manage inventory_import --source=${FULLPATHTOINV} --inventory-name="${AWXINVENTORYNAME}" --overwrite --overwrite-vars || exit $?

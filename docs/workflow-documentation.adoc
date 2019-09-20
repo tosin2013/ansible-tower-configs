@@ -5,6 +5,8 @@ These are the following workflow steps in my lab running VMWARE. You may have to
 
 *Before starting the work flows make sure the credentials are configured in your tower instance. Any successfully synced with your target inventory.* 
 
+update dns server in inventory 
+
 .Manual deployment 
 * WF - Deploy DNS Server  
 * Configure DNS server for OpenShift <-> Against dnsserver  

@@ -29,6 +29,8 @@ Collection of configuration files and scripts for an Ansible tower Mutli-Site Op
 * run the register-ansible-tower.sh script
 
 ## Documentation
+**Configure tower to run workflows**
+
 **OpenShift Deployment Steps on VMWARE**  
 Use the following document below to get your OpenShift cluster configured.  
 [Workflow Documentation](docs/workflow-documentation.adoc)
@@ -37,9 +39,6 @@ Use the following document below to get your OpenShift cluster configured.
 Import OpenShift inventory in to ansible tower  
 [Import Openshift Inventory](docs/import-openshift-inventory.adoc)
 
-# Testing
-Test the Deploy Virtual Machine on VMWARE Job Template
-Test the Wipe vmware vm Job Template
 
 # Notes and Recommendations
 * Create backups of your server once  deployment has completed successfully
