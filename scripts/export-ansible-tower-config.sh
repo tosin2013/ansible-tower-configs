@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Login to ansible tower and export the configuration
-tower-cli login adminvim q
+tower-cli login admin
 tower-cli  receive --all > ansiblefile.json
 
 echo "scrubing ansible file "

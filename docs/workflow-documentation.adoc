@@ -5,7 +5,10 @@ These are the following workflow steps in my lab running VMWARE. You may have to
 
 *Before starting the work flows make sure the credentials are configured in your tower instance. Any successfully synced with your target inventory.* 
 
-update dns server in inventory 
+update dns server in inventories 
+
+* INVENTORIES dnsserver  HOSTS
+** change HOST 0.0.0.0 to IP address of DNS SERVER  
 
 .Manual deployment 
 * WF - Deploy DNS Server  

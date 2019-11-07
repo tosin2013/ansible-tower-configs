@@ -37,6 +37,7 @@ Tower configuration steps
 ** Change `PRIVILEGE ESCALATION METHOD` to sudo
 ** Change `PRIVILEGE ESCALATION USERNAME` to desired username
 ** Change `PRIVILEGE ESCALATION PASSWORD` 
+** Save Settings 
 
 * Test Inventory Sync
 ** Click on INVENTORIES -> vmware-inventory -> Sources 
