@@ -1,10 +1,9 @@
 #!/bin/bash
 # https://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-latest.tar.gz
-# https://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-3.3.3-1.tar.gz
 
-curl -OL https://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-3.3.3-1.tar.gz
-tar -zxvf ansible-tower-setup-3.3.3-1.tar.gz
-cd ansible-tower-setup-3.3.3-1
+curl -OL https://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-latest.tar.gz
+tar -zxvf ansible-tower-setup-latest.tar.gz
+cd ansible-tower-setup-*
 mv inventory inventory.bak
 cat > inventory <<EOF
 [tower]
